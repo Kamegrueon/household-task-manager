@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = ""
+authors = ["AnagumaReonKK <niwaniwaniwaniwatori.gairuze@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.5"
+fastapi = "^0.115.0"
+uvicorn = "^0.31.1"
+supabase = "^2.9.0"
+pyjwt = "^2.9.0"
+python-dotenv = "^1.0.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.9"
+pre-commit = "^4.0.1"
+black = "^24.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+select = ["E", "F", "W", "C", "N", "B", "A"]
+ignore = []
+line-length = 88
+
+[tool.pre-commit]
+config = "backend/.pre-commit-config.yaml"
