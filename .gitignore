@@ -1,5 +1,8 @@
 .git
 .venv
-.env
+.env*
 poetry.lock
 
+# その他の不要ファイル
+__pycache__/
+*.pyc
