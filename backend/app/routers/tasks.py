@@ -7,7 +7,7 @@ from app import database, models, schemas, utils
 
 router = APIRouter(
     prefix="/projects/{project_id}/tasks",
-    tags=["Tasks"],
+    tags=["Masters"],
 )
 
 

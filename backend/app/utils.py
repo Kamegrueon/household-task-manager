@@ -50,8 +50,8 @@ def create_access_token(data: dict[str, Any]) -> str:
 
 
 # ユーザーの認証
-def authenticate_user(db: Session, username: str, password: str):
-    user = db.query(models.User).filter(models.User.username == username).first()
+def authenticate_user(db: Session, email: str, password: str):
+    user = db.query(models.User).filter(models.User.email == email).first()
     if not user:
         return False
     if not verify_password(password, user.password_hash):

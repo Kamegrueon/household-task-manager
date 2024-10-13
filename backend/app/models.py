@@ -1,14 +1,16 @@
 from datetime import datetime
 
-from database import Base
 from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from .database import Base
 
 
 class Project(Base):
     __tablename__ = "projects"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String, index=True)
+    description: Mapped[str] = mapped_column(String, nullable=True)
     owner_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(
@@ -16,8 +18,10 @@ class Project(Base):
     )
 
     owner = relationship("User", back_populates="projects")
-    members = relationship("ProjectMember", back_populates="project")
-    tasks = relationship("Task", back_populates="project")
+    members = relationship(
+        "ProjectMember", back_populates="project", cascade="all, delete-orphan"
+    )
+    tasks = relationship("Task", back_populates="project", cascade="all, delete-orphan")
 
 
 class ProjectMember(Base):
@@ -45,13 +49,14 @@ class Task(Base):
     )
 
     project = relationship("Project", back_populates="tasks")
-    executions = relationship("TaskExecution", back_populates="task")
+    executions = relationship(
+        "TaskExecution", back_populates="task", cascade="all, delete-orphan"
+    )
 
 
 class TaskExecution(Base):
     __tablename__ = "task_executions"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    project_id: Mapped[int] = mapped_column(Integer, ForeignKey("projects.id"))
     task_id: Mapped[int] = mapped_column(Integer, ForeignKey("tasks.id"))
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
     execution_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)

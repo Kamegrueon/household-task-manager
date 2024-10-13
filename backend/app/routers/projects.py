@@ -22,7 +22,9 @@ def create_project(
     """
     新しいプロジェクトを作成します。
     """
-    new_project = models.Project(name=project.name, owner_id=current_user.id)
+    new_project = models.Project(
+        name=project.name, description=project.description, owner_id=current_user.id
+    )
     db.add(new_project)
     db.commit()
     db.refresh(new_project)
@@ -105,6 +107,9 @@ def update_project(
         )
 
     project.name = project_update.name
+
+    if project_update.description is not None:
+        project.description = project_update.description
     db.commit()
     db.refresh(project)
 
