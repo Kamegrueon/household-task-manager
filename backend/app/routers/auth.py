@@ -23,13 +23,9 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     """
     新しいユーザーを登録します。
     """
-    existing_user = (
-        db.query(User)
-        .filter((User.email == user.email) | (User.username == user.username))
-        .first()
-    )
+    existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
-        raise HTTPException(status_code=400, detail="ユーザー名またはメールアドレスが既に存在します")
+        raise HTTPException(status_code=400, detail="メールアドレスが既に存在します")
 
     hashed_password = hash_password(user.password)
     new_user = User(
