@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <!-- 背景 -->
+    <rect width="100" height="100" fill="#FFFFFF" rx="15" ry="15" />
+
+    <!-- 循環する矢印 -->
+    <g transform="translate(50,50)">
+        <circle cx="0" cy="0" r="25" stroke="#4CAF50" stroke-width="4" fill="none" />
+        <path d="M 25,0 
+             A 25,25 0 0,1 15.355,21.213 
+             L 10,15 
+             M 15.355,21.213 
+             A 25,25 0 0,1 -15.355,21.213 
+             L -10,15" stroke="#4CAF50" stroke-width="4" fill="none" />
+    </g>
+
+    <!-- カレンダーアイコン -->
+    <g transform="translate(50,50)">
+        <rect x="-20" y="-30" width="40" height="40" fill="#4CAF50" rx="5" ry="5" />
+        <line x1="-20" y1="-20" x2="20" y2="-20" stroke="#FFFFFF" stroke-width="2" />
+        <line x1="-10" y1="-30" x2="-10" y2="-25" stroke="#FFFFFF" stroke-width="2" />
+        <line x1="10" y1="-30" x2="10" y2="-25" stroke="#FFFFFF" stroke-width="2" />
+        <line x1="-20" y1="-10" x2="20" y2="-10" stroke="#FFFFFF" stroke-width="2" />
+    </g>
+
+    <!-- アプリ名テキスト
+    <text x="120" y="60" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#333333">Everyday Task</text> -->
+</svg>
