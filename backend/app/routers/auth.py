@@ -1,13 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import User
-from app.schemas import Token, UserCreate, UserResponse
+from app.schemas import PasswordChange, Token, UserCreate, UserResponse, UserUpdate
 from app.utils import (
     authenticate_user,
     create_access_token,
+    get_current_user,
     hash_password,
     verify_password,
 )
@@ -16,6 +18,8 @@ router = APIRouter(
     prefix="/auth",
     tags=["Authentication"],
 )
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @router.post("/register/", response_model=UserResponse)
@@ -53,3 +57,50 @@ def login(
 
     access_token = create_access_token(data={"sub": str(user.id)})
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.get("/me", response_model=UserResponse)
+def get_current_user_info(
+    db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+):
+    """
+    ログイン中のユーザーの情報を返します。
+    """
+    return current_user
+
+
+@router.put("/update-profile")
+def update_profile(
+    update_data: UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    ユーザーのプロフィールを更新します。
+    """
+    if update_data.username:
+        current_user.username = update_data.username
+    if update_data.email:
+        current_user.email = update_data.email
+
+    db.add(current_user)
+    db.commit()
+    return {"msg": "プロフィールが更新されました。"}
+
+
+@router.put("/change-password")
+def change_password(
+    change_data: PasswordChange,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    パスワードを変更します。
+    """
+    if not pwd_context.verify(change_data.current_password, current_user.password_hash):
+        raise HTTPException(status_code=400, detail="現在のパスワードが正しくありません。")
+
+    current_user.password_hash = pwd_context.hash(change_data.new_password)
+    db.add(current_user)
+    db.commit()
+    return {"msg": "パスワードが変更されました。"}

@@ -39,6 +39,16 @@ class UserResponse(UserBase):
         from_attributes = True
 
 
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+
+
+class PasswordChange(BaseModel):
+    current_password: str
+    new_password: str
+
+
 # ============================
 # Project Schemas
 # ============================
@@ -69,7 +79,7 @@ class ProjectResponse(ProjectBase):
 
 
 class ProjectMemberBase(BaseModel):
-    role: Optional[str] = None  # 役割などの追加フィールドがあれば
+    role: str
 
 
 class ProjectMemberCreate(ProjectMemberBase):
@@ -77,14 +87,14 @@ class ProjectMemberCreate(ProjectMemberBase):
 
 
 class ProjectMemberUpdate(BaseModel):
-    role: Optional[str] = None  # 更新可能なフィールドのみ
+    role: str
 
 
 class ProjectMemberResponse(BaseModel):
     id: int
     project_id: int
     user: UserResponse  # ユーザー情報を含める
-    role: Optional[str] = None
+    role: str
 
     class Config:
         from_attributes = True
@@ -136,13 +146,13 @@ class TaskExecutionUpdate(BaseModel):
 
 class TaskExecutionCreateResponse(TaskExecutionBase):
     id: int
-    execution_date: Optional[datetime] = None
+    execution_date: datetime
 
     class Config:
         from_attributes = True
 
 
-class TaskExecutionResponse(BaseModel):
+class TaskExecutionResponse(TaskExecutionBase):
     id: int
     task_id: int
     task_name: str

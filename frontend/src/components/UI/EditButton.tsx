@@ -12,7 +12,7 @@ const EditButton: React.FC<EditButtonProps> = ({ onClick, ariaLabel }) => {
   return (
     <button
       onClick={onClick}
-      className="text-green-500 hover:text-green-700"
+      className="text-[#4CAF50] hover:text-green-700"
       aria-label={ariaLabel}
     >
       <FaEdit />

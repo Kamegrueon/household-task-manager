@@ -123,14 +123,14 @@ const TaskEdit: React.FC = () => {
           <div className="flex justify-between">
             <button
               type="submit"
-              className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+              className="px-4 py-2 bg-[#4CAF50] text-white rounded-full hover:bg-green-600"
             >
               更新
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+              className="px-4 py-2 text-gray-700 bg-gray-200 rounded-full hover:bg-gray-300"
             >
               戻る
             </button>

@@ -8,7 +8,7 @@ const getProjectMembers = async (projectId: number): Promise<ProjectMemberRespon
     return response.data;
 };
 
-const addProjectMember = async (projectId: number, member: ProjectMemberCreate): Promise<ProjectMemberResponse> => {
+const createProjectMember = async (projectId: number, member: ProjectMemberCreate): Promise<ProjectMemberResponse> => {
     const response = await api.post<ProjectMemberResponse>(`/projects/${projectId}/members/`, member);
     return response.data;
 };
@@ -24,7 +24,7 @@ const deleteProjectMember = async (projectId: number, memberId: number): Promise
 
 export {
     getProjectMembers,
-    addProjectMember,
+    createProjectMember,
     updateProjectMember,
     deleteProjectMember
 };

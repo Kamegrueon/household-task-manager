@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 
-const Layout: React.FC = () => {
+interface LayoutProps {
+  children?: ReactNode; // children の型を定義
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const isLoggedIn = Boolean(localStorage.getItem('token'));
   return (
     <>
-      <Header /> {/* ヘッダーを表示 */}
+      <Header isLoggedIn={isLoggedIn} /> {/* ヘッダーを表示 */}
       <main>
+        {children}
         <Outlet /> {/* 子ルートのコンポーネントを表示 */}
       </main>
     </>
