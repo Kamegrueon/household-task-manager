@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
 import { setToken } from '../../utils/auth';
 import { TokenResponse } from '../../types';
@@ -70,7 +70,11 @@ const Login: React.FC = () => {
           >
             ログイン
           </button>
-        </form>
+          </form>
+          <div className="text-center">
+            <span className="text-sm text-gray-600">アカウントをお持ちでないですか？ </span>
+            <Link to="/register" className="text-blue-500 hover:underline">登録はこちら</Link>
+          </div>
       </div>
     </div>
   );
