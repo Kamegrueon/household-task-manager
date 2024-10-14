@@ -49,7 +49,7 @@ const Login: React.FC = () => {
               value={form.username}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
             />
           </div>
           <div>
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
             />
           </div>
           <button
@@ -70,11 +70,11 @@ const Login: React.FC = () => {
           >
             ログイン
           </button>
-          </form>
-          <div className="text-center">
-            <span className="text-sm text-gray-600">アカウントをお持ちでないですか？ </span>
-            <Link to="/register" className="text-[#4CAF50] hover:underline">登録はこちら</Link>
-          </div>
+        </form>
+        <div className="text-center">
+          <span className="text-sm text-gray-600">アカウントをお持ちでないですか？ </span>
+          <Link to="/register" className="text-[#4CAF50] hover:underline">登録はこちら</Link>
+        </div>
       </div>
     </div>
   );

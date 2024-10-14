@@ -50,7 +50,7 @@ const TaskCreate: React.FC = () => {
               value={formData.category}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring"
             />
           </div>
           <div>
@@ -62,7 +62,7 @@ const TaskCreate: React.FC = () => {
               value={formData.task_name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring"
             />
           </div>
           <div>
@@ -75,7 +75,7 @@ const TaskCreate: React.FC = () => {
               onChange={handleChange}
               required
               min={1}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring"
             />
           </div>
           <button

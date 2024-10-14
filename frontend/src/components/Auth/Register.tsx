@@ -49,7 +49,7 @@ const Register: React.FC = () => {
               value={form.username}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
             />
           </div>
           <div>
@@ -61,7 +61,7 @@ const Register: React.FC = () => {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
             />
           </div>
           <div>
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
             />
           </div>
           <button

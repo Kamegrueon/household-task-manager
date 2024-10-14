@@ -53,7 +53,7 @@ const ProjectCreate: React.FC = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring"
             />
           </div>
           <div>
@@ -63,7 +63,7 @@ const ProjectCreate: React.FC = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring"
               rows={4}
             ></textarea>
           </div>
