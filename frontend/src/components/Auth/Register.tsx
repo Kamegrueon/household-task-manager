@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
 import { UserCreateParams, UserResponse } from '../../types';
 
@@ -82,7 +82,11 @@ const Register: React.FC = () => {
           >
             登録
           </button>
-        </form>
+          </form>
+          <div className="text-center">
+            <span className="text-sm text-gray-600">既にアカウントをお持ちですか？ </span>
+            <Link to="/login" className="text-blue-500 hover:underline">ログインはこちら</Link>
+          </div>
       </div>
     </div>
   );
