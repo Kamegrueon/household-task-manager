@@ -31,8 +31,3 @@ app.include_router(project_members.router)
 app.include_router(due_tasks.router)
 app.include_router(executions.router)
 app.include_router(tasks.router)
-
-
-@app.get("/")
-def read_root():
-    return {"message": "家事タスク管理アプリへようこそ"}
