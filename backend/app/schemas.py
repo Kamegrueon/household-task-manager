@@ -3,6 +3,10 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr
 
+# ============================
+# Authentication Schemas
+# ============================
+
 
 class Token(BaseModel):
     access_token: str
@@ -13,8 +17,12 @@ class TokenData(BaseModel):
     username: Optional[str] = None
 
 
+# ============================
+# User Schemas
+# ============================
+
+
 class UserBase(BaseModel):
-    id: int
     username: str
     email: EmailStr
 
@@ -25,28 +33,28 @@ class UserCreate(UserBase):
 
 class UserResponse(UserBase):
     id: int
-    username: str
-    email: EmailStr
     created_at: datetime
 
     class Config:
         from_attributes = True
 
 
+# ============================
+# Project Schemas
+# ============================
+
+
 class ProjectBase(BaseModel):
     name: str
-    description: Optional[str]
+    description: Optional[str] = None
 
 
 class ProjectCreate(ProjectBase):
-    name: str
-    description: Optional[str]
+    pass
 
 
 class ProjectResponse(ProjectBase):
     id: int
-    name: str
-    description: Optional[str]
     owner_id: int
     created_at: datetime
     updated_at: datetime
@@ -55,25 +63,36 @@ class ProjectResponse(ProjectBase):
         from_attributes = True
 
 
+# ============================
+# Project Member Schemas
+# ============================
+
+
 class ProjectMemberBase(BaseModel):
-    user: UserBase
     role: Optional[str] = None  # 役割などの追加フィールドがあれば
 
 
 class ProjectMemberCreate(ProjectMemberBase):
-    pass
+    user_id: int
 
 
 class ProjectMemberUpdate(BaseModel):
     role: Optional[str] = None  # 更新可能なフィールドのみ
 
 
-class ProjectMemberResponse(ProjectMemberBase):
+class ProjectMemberResponse(BaseModel):
     id: int
     project_id: int
+    user: UserResponse  # ユーザー情報を含める
+    role: Optional[str] = None
 
     class Config:
         from_attributes = True
+
+
+# ============================
+# Task Schemas
+# ============================
 
 
 class TaskBase(BaseModel):
@@ -96,6 +115,11 @@ class TaskResponse(TaskBase):
         from_attributes = True
 
 
+# ============================
+# Task Execution Schemas
+# ============================
+
+
 class TaskExecutionBase(BaseModel):
     task_id: int
     user_id: int
@@ -112,12 +136,13 @@ class TaskExecutionUpdate(BaseModel):
 
 class TaskExecutionCreateResponse(TaskExecutionBase):
     id: int
-    task_id: int
-    user_id: int
-    execution_date: datetime
+    execution_date: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
 
 
-class TaskExecutionResponse(TaskExecutionBase):
+class TaskExecutionResponse(BaseModel):
     id: int
     task_id: int
     task_name: str

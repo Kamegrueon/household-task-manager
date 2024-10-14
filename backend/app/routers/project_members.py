@@ -3,7 +3,7 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app import database, models, schemas, utils
 
@@ -45,6 +45,7 @@ def get_project_members(
 
     members = (
         db.query(models.ProjectMember)
+        .options(joinedload(models.ProjectMember.user))  # ユーザーデータをロード
         .filter(models.ProjectMember.project_id == project_id)
         .all()
     )
@@ -69,7 +70,7 @@ def add_project_member(
     get_project_membership(project_id, current_user, db)
 
     # 追加しようとしているユーザーが存在するか確認
-    user = db.query(models.User).filter(models.User.id == member.user.id).first()
+    user = db.query(models.User).filter(models.User.id == member.user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="指定されたユーザーが見つかりません")
 
@@ -78,7 +79,7 @@ def add_project_member(
         db.query(models.ProjectMember)
         .filter(
             models.ProjectMember.project_id == project_id,
-            models.ProjectMember.user_id == member.user.id,
+            models.ProjectMember.user_id == member.user_id,
         )
         .first()
     )
@@ -86,7 +87,7 @@ def add_project_member(
         raise HTTPException(status_code=400, detail="既にプロジェクトのメンバーです")
 
     new_member = models.ProjectMember(
-        project_id=project_id, user_id=member.user.id, role=member.role
+        project_id=project_id, user_id=member.user_id, role=member.role
     )
     db.add(new_member)
     db.commit()
