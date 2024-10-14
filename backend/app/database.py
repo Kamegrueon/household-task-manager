@@ -5,24 +5,35 @@ from sqlalchemy.orm import sessionmaker
 
 from .settings import settings
 
-SUPABASE_URL = settings.supabase_url
-SECRET_KEY = settings.secret_key
+# 環境変数に基づいてデータベースURLを選択
+if settings.environment == "production":
+    # 本番環境ではSupabaseのデータベースURLを使用
+    if not settings.supabase_database_url:
+        raise ValueError("SUPABASE_DATABASE_URL が設定されていません。環境変数を確認してください。")
+    database_url = settings.supabase_database_url
+else:
+    # 開発環境ではローカルのPostgreSQLを使用
+    if not settings.local_database_url:
+        raise ValueError("LOCAL_DATABASE_URL が設定されていません。環境変数または .env ファイルを確認してください。")
+    database_url = settings.local_database_url
 
-if not SUPABASE_URL:
-    raise ValueError("SUPABASE_URL が設定されていません。.env ファイルを確認してください。")
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY が設定されていません。.env ファイルを確認してください。")
+DATABASE_URL = database_url
 
-DATABASE_URL = SUPABASE_URL
+# SQLAlchemyエンジンの作成
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
-engine = create_engine(DATABASE_URL)
+# セッションローカルの作成
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# デクララティブベースの作成
 Base = declarative_base()
 
+# OAuth2のスキーム設定
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 def get_db():
+    """データベースセッションを取得する依存関係"""
     db = SessionLocal()
     try:
         yield db
