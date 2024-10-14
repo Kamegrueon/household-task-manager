@@ -85,7 +85,7 @@ const Account: React.FC = () => {
               name="username" 
               value={username} 
               onChange={(e) => setUsername(e.target.value)} 
-              className="w-full p-2 border rounded" 
+              className="w-full p-2 bg-white text-gray-900 border rounded" 
             />
           </div>
           <div className="mb-4">
@@ -96,7 +96,7 @@ const Account: React.FC = () => {
               name="email" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
-              className="w-full p-2 border rounded" 
+              className="w-full p-2 bg-white text-gray-900 border rounded" 
             />
           </div>
           <button type="submit" className="bg-[#4CAF50] text-white px-4 py-2 rounded">更新</button>
@@ -114,7 +114,7 @@ const Account: React.FC = () => {
               name="current-password" 
               value={currentPassword} 
               onChange={(e) => setCurrentPassword(e.target.value)} 
-              className="w-full p-2 border rounded" 
+              className="w-full p-2 bg-white text-gray-900 border rounded" 
             />
           </div>
           <div className="mb-4">
@@ -125,7 +125,7 @@ const Account: React.FC = () => {
               name="new-password" 
               value={newPassword} 
               onChange={(e) => setNewPassword(e.target.value)} 
-              className="w-full p-2 border rounded" 
+              className="w-full p-2 bg-white text-gray-900 border rounded" 
             />
           </div>
           <button type="submit" className="bg-[#4CAF50] text-white px-4 py-2 rounded">変更</button>
