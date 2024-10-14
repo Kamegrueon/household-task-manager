@@ -88,7 +88,7 @@ const TaskEdit: React.FC = () => {
               value={formData.category}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded"
             />
           </div>
           <div className="mb-4">
@@ -102,7 +102,7 @@ const TaskEdit: React.FC = () => {
               value={formData.task_name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded"
             />
           </div>
           <div className="mb-4">
@@ -117,7 +117,7 @@ const TaskEdit: React.FC = () => {
               onChange={handleChange}
               required
               min={1}
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded"
             />
           </div>
           <div className="flex justify-between">

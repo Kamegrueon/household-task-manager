@@ -50,6 +50,7 @@ const MenuModal: React.FC<MenuModalProps> = ({ isOpen, toggleModal, isValidProje
                         </NavLink>
                         <NavLink
                             to={`/projects/${project_id}/tasks`}
+                            end
                             className={({ isActive }) =>
                                 isActive
                                     ? "py-2 px-3 text-blue-700 bg-gray-200 rounded-md"

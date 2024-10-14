@@ -118,7 +118,7 @@ const TaskExecutionEdit: React.FC = () => {
               name="task_name"
               value={taskName}
               readOnly
-              className="w-full px-3 py-2 border rounded bg-gray-100"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded"
             />
           </div>
 
@@ -131,7 +131,7 @@ const TaskExecutionEdit: React.FC = () => {
               value={formData.user_id}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring"
             >
               <option value="">選択してください</option>
               {members.map((member) => (
@@ -152,7 +152,7 @@ const TaskExecutionEdit: React.FC = () => {
               value={formData.execution_date}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring"
             />
           </div>
 

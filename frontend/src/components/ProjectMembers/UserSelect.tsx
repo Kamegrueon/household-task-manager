@@ -1,5 +1,3 @@
-// frontend/src/components/ProjectMembers/UserSelect.tsx
-
 import React, { useEffect, useState } from 'react';
 import AsyncSelect from 'react-select/async';
 import { searchUsersByEmail, getUserById } from '../../services/userApi';
@@ -13,21 +11,19 @@ interface UserOption {
 interface UserSelectProps {
   selectedUserId: number;
   onChange: (userId: number) => void;
-  excludeUserIds?: number[]; // **追加**
+  excludeUserIds?: number[];
 }
 
-const UserSelect: React.FC<UserSelectProps> = ({ selectedUserId, onChange, excludeUserIds = [] }) => { // **修正**
+const UserSelect: React.FC<UserSelectProps> = ({ selectedUserId, onChange, excludeUserIds = [] }) => {
   const [selectedOption, setSelectedOption] = useState<UserOption | null>(null);
 
-  // loadOptions を Promise スタイルで定義
   const loadOptions = async (inputValue: string): Promise<UserOption[]> => {
     if (!inputValue) return [];
     try {
       const users = await searchUsersByEmail(inputValue);
-      // 既存メンバーを除外
       const filteredUsers = users.filter(user => !excludeUserIds.includes(user.id));
       return filteredUsers.map(user => ({
-        label: `${user.username} (${user.email})`,
+        label: `${user.username}`,
         value: user.id,
       }));
     } catch (error) {
@@ -36,7 +32,6 @@ const UserSelect: React.FC<UserSelectProps> = ({ selectedUserId, onChange, exclu
     }
   };
 
-  // 選択されたユーザーの情報を取得してセット
   useEffect(() => {
     const fetchSelectedUser = async () => {
       if (selectedUserId > 0) {
@@ -44,7 +39,7 @@ const UserSelect: React.FC<UserSelectProps> = ({ selectedUserId, onChange, exclu
           const user = await getUserById(selectedUserId);
           if (user) {
             setSelectedOption({
-              label: `${user.username} (${user.email})`,
+              label: `${user.username}`,
               value: user.id,
             });
           } else {
@@ -62,7 +57,6 @@ const UserSelect: React.FC<UserSelectProps> = ({ selectedUserId, onChange, exclu
     fetchSelectedUser();
   }, [selectedUserId]);
 
-  // 選択変更時のハンドラー
   const handleChange = (option: UserOption | null) => {
     if (option) {
       onChange(option.value);
@@ -81,9 +75,9 @@ const UserSelect: React.FC<UserSelectProps> = ({ selectedUserId, onChange, exclu
         defaultOptions
         value={selectedOption}
         onChange={handleChange}
-        placeholder="メールアドレスで検索..."
+        placeholder="ユーザー名で検索..."
         noOptionsMessage={() => "ユーザーが見つかりませんでした"}
-        className="mt-1"
+        className="block w-full bg-white text-gray-900 border rounded focus:outline-none focus:ring"
         components={{ DropdownIndicator: () => <FaSearch className="mr-2 text-gray-400" /> }}
       />
     </div>
