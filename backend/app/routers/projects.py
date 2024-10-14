@@ -31,7 +31,7 @@ def create_project(
 
     # プロジェクトメンバーとしてオーナーを追加
     project_member = models.ProjectMember(
-        project_id=new_project.id, user_id=current_user.id, role="admin"
+        project_id=new_project.id, user_id=current_user.id, role="Admin"
     )
     db.add(project_member)
     db.commit()

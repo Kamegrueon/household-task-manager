@@ -49,7 +49,7 @@ const Register: React.FC = () => {
               value={form.username}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
             />
           </div>
           <div>
@@ -61,7 +61,7 @@ const Register: React.FC = () => {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
             />
           </div>
           <div>
@@ -73,19 +73,19 @@ const Register: React.FC = () => {
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
             />
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full px-4 py-2 font-semibold text-white bg-[#4CAF50] rounded focus:outline-none focus:ring ring-[#4CAF50]"
           >
             登録
           </button>
           </form>
           <div className="text-center">
             <span className="text-sm text-gray-600">既にアカウントをお持ちですか？ </span>
-            <Link to="/login" className="text-blue-500 hover:underline">ログインはこちら</Link>
+            <Link to="/login" className="text-[#4CAF50] hover:underline">ログインはこちら</Link>
           </div>
       </div>
     </div>

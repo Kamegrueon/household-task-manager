@@ -1,34 +1,23 @@
-// frontend/src/components/Projects/ProjectList.tsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../services/api';
-import { FaTrash, FaEdit } from 'react-icons/fa';
+import { FaTrash, FaEdit, FaPlus } from 'react-icons/fa';
 import useProjects from '../../hooks/useProjects';
+import api from '../../services/api';
 import { toast } from 'react-toastify';
 import ErrorMessage from '../UI/ErrorMessage';
 import LoadingSpinner from '../UI/LoadingSpinner';
 
 const ProjectList: React.FC = () => {
   const navigate = useNavigate();
-
-  // カスタムフックを使用してプロジェクトの状態を管理
   const { projects, loading, error, setProjects } = useProjects();
-
   const [deleteError, setDeleteError] = useState<string>('');
 
-  /**
-   * プロジェクト削除ハンドラー
-   *
-   * @param projectId - 削除するプロジェクトのID
-   */
   const handleDelete = async (projectId: number) => {
     const confirmDelete = window.confirm('本当にこのプロジェクトを削除しますか？');
     if (!confirmDelete) return;
 
     try {
       await api.delete(`/projects/${projectId}`);
-      // プロジェクトが削除されたら、projectsステートを更新
       setProjects((prevProjects) => prevProjects.filter((project) => project.id !== projectId));
       toast.success('プロジェクトが正常に削除されました。');
     } catch (err) {
@@ -37,31 +26,31 @@ const ProjectList: React.FC = () => {
     }
   };
 
-  /**
-   * プロジェクト編集ハンドラー
-   *
-   * @param projectId - 編集するプロジェクトのID
-   */
   const handleEdit = (projectId: number) => {
-    navigate(`/projects/${projectId}/edit`); // 編集ページへのルートを指定
+    navigate(`/projects/${projectId}/edit`);
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
-        <h2 className="text-2xl font-bold mb-4">プロジェクト一覧</h2>
-        {error && <ErrorMessage message={error} />}
-        {deleteError && <ErrorMessage message={deleteError} />}
+        {/* プロジェクト一覧ヘッダー */}
         <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg md:text-xl lg:text-2xl font-bold">プロジェクト一覧</h2>
           <button
             onClick={() => navigate(`/projects/new`)}
-            className="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="bg-[#4CAF50] text-white rounded-full p-2 md:px-4 md:py-2 md:flex md:items-center md:space-x-2 text-sm md:text-base lg:text-lg"
           >
-            新規プロジェクト作成
+            {/* レスポンシブ対応: モバイルではアイコンのみ、デスクトップではテキスト付き */}
+            <FaPlus className="text-white" />
+            <span className="hidden md:inline">新規プロジェクト</span>
           </button>
         </div>
+
+        {error && <ErrorMessage message={error} />}
+        {deleteError && <ErrorMessage message={deleteError} />}
+        
         {loading ? (
-            <LoadingSpinner loading={loading} />
+          <LoadingSpinner loading={loading} />
         ) : projects.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border">
@@ -78,7 +67,7 @@ const ProjectList: React.FC = () => {
                     <td className="px-4 py-2 border-b text-center">
                       <button
                         onClick={() => navigate(`/projects/${project.id}/tasks`)}
-                        className="text-blue-500 hover:underline"
+                        className="hover:underline"
                       >
                         {project.name}
                       </button>
@@ -88,7 +77,7 @@ const ProjectList: React.FC = () => {
                       {/* 編集ボタン */}
                       <button
                         onClick={() => handleEdit(project.id)}
-                        className="text-green-500 hover:text-green-700"
+                        className="text-[#4CAF50] hover:text-green-700"
                         aria-label={`Edit project ${project.name}`}
                       >
                         <FaEdit />

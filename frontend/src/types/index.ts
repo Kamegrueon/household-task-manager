@@ -32,18 +32,18 @@ export interface ProjectResponse {
 
 export interface ProjectMemberCreate {
   user_id: number;
-  role?: string; // 役割などの追加情報があれば
+  role: string; // 役割などの追加情報があれば
 }
 
 export interface ProjectMemberUpdate {
-  role?: string; // 更新可能なフィールドのみ
+  role: string; // 更新可能なフィールドのみ
 }
 
 export interface ProjectMemberResponse {
 	id: number;
 	project_id: number
   user: UserResponse;
-  role?: string; // 役割などの追加情報があれば
+  role: string; // 役割などの追加情報があれば
 }
 
 export interface TaskCreateParams {

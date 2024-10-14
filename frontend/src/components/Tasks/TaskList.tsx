@@ -1,9 +1,7 @@
-// frontend/src/components/Tasks/TaskList.tsx
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import { FaTrash, FaEdit } from 'react-icons/fa';
+import { FaTrash, FaEdit, FaPlus } from 'react-icons/fa';
 import useTasks from '../../hooks/useTasks';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../UI/LoadingSpinner';
@@ -15,7 +13,6 @@ const TaskList: React.FC = () => {
 
   // カスタムフックを使用してタスクの状態を管理
   const { tasks, loading, error, setTasks } = useTasks(project_id);
-
   const [deleteError, setDeleteError] = useState<string>('');
 
   /**
@@ -50,17 +47,24 @@ const TaskList: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
-        <h2 className="text-2xl font-bold mb-4">タスク一覧</h2>
+        {/* タスク一覧ヘッダー */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg md:text-xl lg:text-2xl font-bold">タスク一覧</h2>
+          <button
+            onClick={() => navigate(`/projects/${project_id}/tasks/new`)}
+            className="bg-[#4CAF50] text-white rounded-full p-2 md:px-4 md:py-2 md:flex md:items-center md:space-x-2 text-sm md:text-base lg:text-lg"
+          >
+            {/* レスポンシブ対応: モバイルではアイコンのみ、デスクトップではテキスト付き */}
+            <FaPlus className="text-white" />
+            <span className="hidden md:inline">新規タスク作成</span>
+          </button>
+        </div>
+
         {error && <ErrorMessage message={error} />}
         {deleteError && <ErrorMessage message={deleteError} />}
-        <button
-          onClick={() => navigate(`/projects/${project_id}/tasks/new`)}
-          className="inline-block px-4 py-2 mb-4 text-white bg-blue-500 rounded hover:bg-blue-600"
-        >
-          新規タスク作成
-        </button>
+        
         {loading ? (
-            <LoadingSpinner loading={loading} />
+          <LoadingSpinner loading={loading} />
         ) : tasks.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border">
@@ -82,7 +86,7 @@ const TaskList: React.FC = () => {
                       {/* 編集ボタン */}
                       <button
                         onClick={() => handleEdit(task.id)}
-                        className="text-green-500 hover:text-green-700"
+                        className="text-[#4CAF50] hover:text-green-700"
                         aria-label={`Edit task ${task.task_name}`}
                       >
                         <FaEdit />

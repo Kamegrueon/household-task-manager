@@ -86,7 +86,7 @@ const ProjectEdit: React.FC = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
             />
           </div>
           <div className="mb-4">
@@ -98,21 +98,21 @@ const ProjectEdit: React.FC = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
               rows={4}
             ></textarea>
           </div>
           <div className="flex justify-between">
             <button
               type="submit"
-              className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200"
+              className="px-4 py-2 bg-[#4CAF50] text-white rounded-full focus:outline-none focus:ring focus:ring-green-200"
             >
               更新
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+              className="px-4 py-2 text-gray-700 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
             >
               戻る
             </button>

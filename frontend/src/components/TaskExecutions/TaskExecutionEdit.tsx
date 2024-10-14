@@ -131,7 +131,7 @@ const TaskExecutionEdit: React.FC = () => {
               value={formData.user_id}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
             >
               <option value="">選択してください</option>
               {members.map((member) => (
@@ -152,7 +152,7 @@ const TaskExecutionEdit: React.FC = () => {
               value={formData.execution_date}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
             />
           </div>
 
@@ -161,14 +161,14 @@ const TaskExecutionEdit: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200 disabled:opacity-50"
+              className="px-4 py-2 text-white bg-[#4CAF50] rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200 disabled:opacity-50"
             >
               更新
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+              className="px-4 py-2 text-gray-700 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
             >
               戻る
             </button>

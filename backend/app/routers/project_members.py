@@ -67,7 +67,6 @@ def add_project_member(
     """
     プロジェクトに新しいメンバーを追加します。
     """
-    get_project_membership(project_id, current_user, db)
 
     # 追加しようとしているユーザーが存在するか確認
     user = db.query(models.User).filter(models.User.id == member.user_id).first()
@@ -120,12 +119,24 @@ def update_project_member(
     if not member:
         raise HTTPException(status_code=404, detail="プロジェクトメンバーが見つかりません")
 
-    if member_update.role is not None:
-        member.role = member_update.role
+    original_role = member.role.lower()
+    new_role = member_update.role.lower()
 
+    if original_role == "admin" and new_role != "admin":
+        admin_count = (
+            db.query(models.ProjectMember)
+            .filter(
+                models.ProjectMember.project_id == project_id,
+                models.ProjectMember.role.ilike("admin"),
+            )
+            .count()
+        )
+        if admin_count <= 1:
+            raise HTTPException(status_code=400, detail="プロジェクトには少なくとも1人のAdminが必要です。")
+
+    member.role = member_update.role
     db.commit()
     db.refresh(member)
-
     return member
 
 
@@ -151,6 +162,27 @@ def delete_project_member(
     )
     if not member:
         raise HTTPException(status_code=404, detail="プロジェクトメンバーが見つかりません")
+
+    # メンバーのロールと総メンバー数をチェック
+    if member.role.lower() == "admin":
+        admin_count = (
+            db.query(models.ProjectMember)
+            .filter(
+                models.ProjectMember.project_id == project_id,
+                models.ProjectMember.role.ilike("admin"),
+            )
+            .count()
+        )
+        if admin_count <= 1:
+            raise HTTPException(status_code=400, detail="プロジェクトには少なくとも1人のAdminが必要です。")
+
+    total_members = (
+        db.query(models.ProjectMember)
+        .filter(models.ProjectMember.project_id == project_id)
+        .count()
+    )
+    if total_members <= 1:
+        raise HTTPException(status_code=400, detail="プロジェクトには少なくとも1人のメンバーが必要です。")
 
     db.delete(member)
     db.commit()
