@@ -5,8 +5,8 @@ import api from '../../services/api';
 import { TaskExecutionResponse, TaskExecutionUpdate, ProjectMemberResponse } from '../../types';
 import useTaskExecutionForm from '../../hooks/useTaskExecutionForm';
 import { toast } from 'react-toastify';
-import ErrorMessage from '../UI/ErrorMessage';
-import LoadingSpinner from '../UI/LoadingSpinner';
+import ErrorMessage from '../Atoms/ErrorMessage';
+import LoadingSpinner from '../Atoms/LoadingSpinner';
 
 const TaskExecutionEdit: React.FC = () => {
   const { project_id, execution_id } = useParams<{ project_id: string; execution_id: string }>();

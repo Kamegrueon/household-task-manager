@@ -49,7 +49,9 @@ const DueTaskList: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
-        <h2 className="text-2xl font-bold mb-4">未実施タスク一覧</h2>
+        <div className="flex justify-between items-center py-2">
+          <h2 className="text-lg md:text-xl lg:text-2xl font-bold">未実施タスク一覧</h2>
+        </div>
         {error && (
           <div className="p-4 mb-4 text-red-700 bg-red-100 border border-red-400 rounded">
             {error}

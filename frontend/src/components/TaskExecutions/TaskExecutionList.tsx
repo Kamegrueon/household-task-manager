@@ -3,10 +3,10 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useExecutions from '../../hooks/useTaskExecutions';
-import LoadingSpinner from '../UI/LoadingSpinner';
-import ErrorMessage from '../UI/ErrorMessage';
-import EditButton from '../UI/EditButton';
-import DeleteButton from '../UI/DeleteButton';
+import LoadingSpinner from '../Atoms/LoadingSpinner';
+import ErrorMessage from '../Atoms/ErrorMessage';
+import EditButton from '../Atoms/EditButton';
+import DeleteButton from '../Atoms/DeleteButton';
 
 const TaskExecutionList: React.FC = () => {
   const { project_id } = useParams<{ project_id: string }>();
@@ -39,11 +39,13 @@ const TaskExecutionList: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
-        <h2 className="text-2xl font-bold mb-4">タスク実行履歴一覧</h2>
-        {error && <ErrorMessage message={error} />}
-        {loading ? (
-          <LoadingSpinner loading={loading} />
-        ) : executions.length > 0 ? (
+        <div className="flex justify-between items-center py-2">
+          <h2 className="text-lg md:text-xl lg:text-2xl font-bold">タスク実行履歴一覧</h2>
+        </div>
+          {error && <ErrorMessage message={error} />}
+          {loading ? (
+            <LoadingSpinner loading={loading} />
+          ) : executions.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border">
               <thead>
