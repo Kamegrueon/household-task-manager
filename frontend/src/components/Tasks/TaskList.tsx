@@ -4,8 +4,8 @@ import api from '../../services/api';
 import { FaTrash, FaEdit, FaPlus } from 'react-icons/fa';
 import useTasks from '../../hooks/useTasks';
 import { toast } from 'react-toastify';
-import LoadingSpinner from '../UI/LoadingSpinner';
-import ErrorMessage from '../UI/ErrorMessage';
+import LoadingSpinner from '../Atoms/LoadingSpinner';
+import ErrorMessage from '../Atoms/ErrorMessage';
 
 const TaskList: React.FC = () => {
   const { project_id } = useParams<{ project_id: string }>();
@@ -48,7 +48,7 @@ const TaskList: React.FC = () => {
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
         {/* タスク一覧ヘッダー */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center py-2">
           <h2 className="text-lg md:text-xl lg:text-2xl font-bold">タスク一覧</h2>
           <button
             onClick={() => navigate(`/projects/${project_id}/tasks/new`)}
@@ -56,7 +56,7 @@ const TaskList: React.FC = () => {
           >
             {/* レスポンシブ対応: モバイルではアイコンのみ、デスクトップではテキスト付き */}
             <FaPlus className="text-white" />
-            <span className="hidden md:inline">新規タスク作成</span>
+            <span className="hidden md:inline">タスク作成</span>
           </button>
         </div>
 

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import RoutesConfig from './routes';
-import ErrorBoundary from './components/UI/ErrorBoundary';
+import ErrorBoundary from './components/Atoms/ErrorBoundary';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

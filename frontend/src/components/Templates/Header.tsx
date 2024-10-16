@@ -1,131 +1,96 @@
+// src/components/Templates/Header.tsx
+
 import React, { useState } from 'react';
-import { NavLink, useMatch } from 'react-router-dom';
-import Logo from './Logo';  // ロゴコンポーネント
-import MenuModal from './MenuModal';  // ハンバーガーメニューモーダル
-import ProjectModal from './ProjectModal';  // プロジェクト設定モーダル
-import { FaBars, FaCog, FaUserCircle } from 'react-icons/fa';
+import { useMatch, NavLink } from 'react-router-dom';
+import LogoWithTitle from '../Molecules/LogoWithTitle';
+import IconButton from '../Molecules/IconButton';
+import NavBar from '../Organisms/NavBar';
+import TabBar from '../Organisms/TabBar';
+import ProjectModal from '../Organisms/ProjectModal';
+import Icon from '../Atoms/Icon';
+import MenuModal from '../Organisms/MenuModal';
 
-const Header: React.FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
-    const [isMenuModalOpen, setIsMenuModalOpen] = useState<boolean>(false);
-    const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false);
+interface HeaderProps {
+  isLoggedIn: boolean;
+}
 
-    const matchProject = useMatch("/projects/:project_id/*");
-    const project_id = matchProject?.params.project_id;
+const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
+  const [isMenuModalOpen, setIsMenuModalOpen] = useState<boolean>(false);
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false);
 
-    const toggleMenuModal = () => {
-        setIsMenuModalOpen(!isMenuModalOpen);
-    };
+  const matchProject = useMatch('/projects/:project_id/*');
+  const projectId = matchProject?.params.project_id;
 
-    const toggleProjectModal = () => {
-        setIsProjectModalOpen(!isProjectModalOpen);
-    };
+  const toggleProjectModal = () => {
+    setIsProjectModalOpen(!isProjectModalOpen);
+  };
 
-    const isValidProjectId = (id?: string): boolean => {
-        return id !== undefined && /^\d+$/.test(id);
-    };
+  const toggleMenuModal = () => {
+    setIsMenuModalOpen(!isMenuModalOpen);
+  };
 
-    return (
-        <>
-            <header className="bg-white shadow">
-                <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-                    <NavLink to="/projects" className="flex items-center">
-                        <Logo />  {/* ロゴとタイトル */}
-                    </NavLink>
+  const isValidProjectId = (id?: string): boolean => {
+    return id !== undefined && /^\d+$/.test(id);
+  };
 
-                    <div className="flex items-center">
-                        {/* レスポンシブの場合はハンバーガーメニュー */}
-                        <button
-                            onClick={toggleMenuModal}
-                            className="text-gray-600 hover:text-gray-800 md:hidden"
-                            title="メニュー"
-                        >
-                            <FaBars size={24} />
-                        </button>
+  return (
+    <>
+      <header className="bg-white shadow">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+          <NavLink to="/projects">
+            <LogoWithTitle />
+          </NavLink>
 
-                        {/* ログインしている場合のみ、レスポンシブ以外でユーザーアイコンを表示 */}
-                        {isLoggedIn && (
-                            <NavLink to="/account" className="hidden md:block text-gray-600 hover:text-gray-800 ml-4" title="アカウント設定">
-                                <FaUserCircle size={32} />
-                            </NavLink>
-                        )}
-                    </div>
-                </div>
-
-                {/* ナビゲーションバー（デスクトップのみ表示） */}
-                {isValidProjectId(project_id) && (
-                    <nav className="bg-gray-100 pt-4 hidden md:block">
-                        <div className="max-w-6xl mx-auto px-4 flex space-x-4">
-                            <NavLink
-                                to="/projects"
-                                end
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "py-2 px-3 text-blue-700 bg-gray-200 rounded-md"
-                                        : "py-2 px-3 text-gray-700 hover:bg-gray-200 rounded-md"
-                                }
-                            >
-                                プロジェクト一覧
-                            </NavLink>
-                            <NavLink
-                                to={`/projects/${project_id}/tasks/due`}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "py-2 px-3 text-blue-700 bg-gray-200 rounded-md"
-                                        : "py-2 px-3 text-gray-700 hover:bg-gray-200 rounded-md"
-                                }
-                            >
-                                未実施タスク一覧
-                            </NavLink>
-                            <NavLink
-                                to={`/projects/${project_id}/tasks`}
-                                end
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "py-2 px-3 text-blue-700 bg-gray-200 rounded-md"
-                                        : "py-2 px-3 text-gray-700 hover:bg-gray-200 rounded-md"
-                                }
-                            >
-                                登録タスク一覧
-                            </NavLink>
-                            <NavLink
-                                to={`/projects/${project_id}/executions`}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "py-2 px-3 text-blue-700 bg-gray-200 rounded-md"
-                                        : "py-2 px-3 text-gray-700 hover:bg-gray-200 rounded-md"
-                                }
-                            >
-                                タスク履歴一覧
-                            </NavLink>
-                            <button
-                                onClick={toggleProjectModal}
-                                className="text-gray-600 hover:text-gray-800 hidden md:block ml-4"
-                                title="プロジェクト設定"
-                            >
-                                <FaCog size={24} />
-                            </button>
-                        </div>
-                    </nav>
-                )}
-            </header>
-
-            {/* レスポンシブ時にのみ表示されるメニューモーダル */}
-            <MenuModal 
-                isOpen={isMenuModalOpen} 
-                toggleModal={toggleMenuModal} 
-                isValidProjectId={isValidProjectId(project_id)} 
-                project_id={project_id}
-                toggleProjectModal={toggleProjectModal}  // プロジェクトモーダルを開く関数を渡す
+          <div className="flex items-center">
+            {/* ハンバーガーメニュー（モバイル表示時のみ） */}
+            <IconButton
+              onClick={toggleMenuModal}
+              iconName="Menu"
+              title="メニュー"
+              className="md:hidden"
+              size={24}
             />
 
-            {/* プロジェクト設定モーダル */}
-            <ProjectModal 
-                isOpen={isProjectModalOpen} 
-                toggleModal={toggleProjectModal} 
-                project_id={project_id} 
-            />
-        </>
-    );
+            {/* アカウントアイコン（デスクトップ表示時のみ） */}
+            {isLoggedIn && (
+              <NavLink
+                to="/account"
+                className="hidden md:block text-gray-600 hover:text-gray-800 ml-4"
+                title="アカウント設定"
+              >
+                <Icon iconName="User" size={32} />
+              </NavLink>
+            )}
+          </div>
+        </div>
+
+        {/* ナビゲーションバー（デスクトップ表示時のみ） */}
+        {isValidProjectId(projectId) && (
+          <NavBar projectId={projectId!} onProjectSettingsClick={toggleProjectModal} />
+        )}
+      </header>
+
+      {/* タブバー（モバイル表示時のみ） */}
+      {isValidProjectId(projectId) && <TabBar projectId={projectId!} />}
+
+      {/* レスポンシブ時にのみ表示されるメニューモーダル */}
+      <MenuModal
+        isOpen={isMenuModalOpen}
+        toggleModal={toggleMenuModal}
+        isValidProjectId={isValidProjectId(projectId)}
+        project_id={projectId}
+        toggleProjectModal={toggleProjectModal}  // プロジェクトモーダルを開く関数を渡す
+      />
+
+
+      {/* プロジェクト設定モーダル */}
+      <ProjectModal
+        isOpen={isProjectModalOpen}
+        toggleModal={toggleProjectModal}
+        project_id={projectId}
+      />
+    </>
+  );
 };
 
 export default Header;
