@@ -10,7 +10,8 @@ type IconButtonProps = {
   title?: string;
   className?: string;
   size?: number;
-} & IconEnum
+  children?: React.ReactNode; // 追加
+} & IconEnum;
 
 const IconButton: React.FC<IconButtonProps> = ({
   onClick,
@@ -18,6 +19,7 @@ const IconButton: React.FC<IconButtonProps> = ({
   title,
   className = '',
   size = 24,
+  children, // 追加
 }) => (
   <Button
     onClick={onClick}
@@ -25,6 +27,7 @@ const IconButton: React.FC<IconButtonProps> = ({
     className={`text-gray-600 hover:text-gray-800 ${className}`}
   >
     <Icon iconName={iconName} size={size} />
+    {children} {/* 追加 */}
   </Button>
 );
 

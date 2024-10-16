@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import ErrorMessage from '../Atoms/ErrorMessage';
 import LoadingSpinner from '../Atoms/LoadingSpinner';
 import ProjectTable from '../Organisms/ProjectTable';
-import Icon from '../Atoms/Icon';
+import IconButton from '../Molecules/IconButton';
 
 const ProjectList: React.FC = () => {
   const navigate = useNavigate();
@@ -40,14 +40,17 @@ const ProjectList: React.FC = () => {
         {/* プロジェクト一覧ヘッダー */}
         <div className="flex justify-between items-center py-2">
           <h2 className="text-lg md:text-xl lg:text-2xl font-bold">プロジェクト一覧</h2>
-          <button
-            onClick={() => navigate(`/projects/new`)}
-            className="bg-[#4CAF50] text-white rounded-full p-2 md:px-4 md:py-2 md:flex md:items-center md:space-x-2 text-sm md:text-base lg:text-lg"
+          <IconButton
+              onClick={() => navigate(`/projects/new`)}
+              className="bg-[#4CAF50] text-white rounded-full p-2 md:px-4 md:py-2 md:flex md:items-center md:space-x-2 text-sm md:text-base lg:text-lg"
+              iconName="Plus" // 'Plus' アイコンを使用
+              size={14}
+              title="新規プロジェクト"
           >
-            {/* レスポンシブ対応: モバイルではアイコンのみ、デスクトップではテキスト付き */}
-            <Icon iconName='Plus' />
-            <span className="hidden md:inline">新規プロジェクト</span>
-          </button>
+              {/* レスポンシブ対応: モバイルではアイコンのみ、デスクトップではテキスト付き */}
+              <span className="hidden md:inline">新規プロジェクト</span>
+          </IconButton>
+
         </div>
 
         {/* エラーメッセージ */}
