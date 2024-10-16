@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import ErrorMessage from '../Atoms/ErrorMessage';
 import LoadingSpinner from '../Atoms/LoadingSpinner';
 import ProjectTable from '../Organisms/ProjectTable';
-import Icon from '../Atoms/Icon';
 import IconButton from '../Molecules/IconButton';
 
 const ProjectList: React.FC = () => {
