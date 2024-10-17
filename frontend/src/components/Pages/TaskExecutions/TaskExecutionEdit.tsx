@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProjectMembers } from '../../services/projectMemberApi'; // 新しいAPIサービスのインポート
-import api from '../../services/api';
-import { TaskExecutionResponse, TaskExecutionUpdate, ProjectMemberResponse } from '../../types';
-import useTaskExecutionForm from '../../hooks/useTaskExecutionForm';
+import { getProjectMembers } from '../../../services/projectMemberApi'; // 新しいAPIサービスのインポート
+import api from '../../../services/api';
+import { TaskExecutionResponse, TaskExecutionUpdate, ProjectMemberResponse } from '../../../types';
+import useTaskExecutionForm from '../../../hooks/useTaskExecutionForm';
 import { toast } from 'react-toastify';
-import ErrorMessage from '../Atoms/ErrorMessage';
-import LoadingSpinner from '../Atoms/LoadingSpinner';
+import ErrorMessage from '../../Atoms/ErrorMessage';
+import LoadingSpinner from '../../Atoms/LoadingSpinner';
 
 const TaskExecutionEdit: React.FC = () => {
-  const { project_id, execution_id } = useParams<{ project_id: string; execution_id: string }>();
+  const { projectId, executionId } = useParams<{ projectId: string; executionId: string }>();
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
   const [updateError, setUpdateError] = useState<string>('');
@@ -25,7 +25,7 @@ const TaskExecutionEdit: React.FC = () => {
 
   useEffect(() => {
     const fetchExecutionAndMembers = async () => {
-      if (!project_id || !execution_id) {
+      if (!projectId || !executionId) {
         setError('プロジェクトIDまたは実行履歴IDが不足しています。');
         toast.error('プロジェクトIDまたは実行履歴IDが不足しています。');
         return;
@@ -34,7 +34,7 @@ const TaskExecutionEdit: React.FC = () => {
       setLoading(true);
       try {
         // タスク実行履歴の取得
-        const executionResponse = await api.get<TaskExecutionResponse>(`/projects/${project_id}/executions/${execution_id}`);
+        const executionResponse = await api.get<TaskExecutionResponse>(`/projects/${projectId}/executions/${executionId}`);
         const execution = executionResponse.data;
         setTaskName(execution.task_name);
         setFormData({
@@ -43,7 +43,7 @@ const TaskExecutionEdit: React.FC = () => {
         });
 
         // プロジェクトメンバーの取得
-        const membersResponse = await getProjectMembers(parseInt(project_id));
+        const membersResponse = await getProjectMembers(parseInt(projectId));
         setMembers(membersResponse);
       } catch (err) {
         setError('タスク実行履歴の取得に失敗しました。');
@@ -54,7 +54,7 @@ const TaskExecutionEdit: React.FC = () => {
     };
 
     fetchExecutionAndMembers();
-  }, [project_id, execution_id, setFormData]);
+  }, [projectId, executionId, setFormData]);
 
   /**
    * フォーム送信ハンドラー
@@ -65,14 +65,14 @@ const TaskExecutionEdit: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      if (project_id && execution_id) {
+      if (projectId && executionId) {
         const updateData: TaskExecutionUpdate = {
           user_id: formData.user_id!,
           execution_date: new Date(formData.execution_date!).toISOString(),
         };
-        await api.put(`/projects/${project_id}/executions/${execution_id}`, updateData);
+        await api.put(`/projects/${projectId}/executions/${executionId}`, updateData);
         toast.success('タスク実行履歴が正常に更新されました。');
-        navigate(`/projects/${project_id}/executions`);
+        navigate(`/projects/${projectId}/executions`);
       }
     } catch (err) {
       setUpdateError('タスク実行履歴の更新に失敗しました。');
@@ -84,7 +84,7 @@ const TaskExecutionEdit: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-100 p-4">
+      <div className="bg-gray-100 p-4">
         <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
           <ErrorMessage message={error} />
         </div>
@@ -95,7 +95,7 @@ const TaskExecutionEdit: React.FC = () => {
   if (loading && !taskName) {
     // 初期データ取得中のローディング
     return (
-      <div className="min-h-screen bg-gray-100 p-4">
+      <div className="bg-gray-100 p-4">
         <div className="max-w-md mx-auto bg-white rounded shadow p-6">
           <LoadingSpinner loading={loading} />
         </div>
@@ -104,7 +104,6 @@ const TaskExecutionEdit: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-md mx-auto bg-white rounded shadow p-6">
         <h2 className="text-2xl font-bold mb-4">タスク実行履歴編集</h2>
         {updateError && <ErrorMessage message={updateError} />}
@@ -161,7 +160,7 @@ const TaskExecutionEdit: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 text-white bg-[#4CAF50] rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200 disabled:opacity-50"
+              className="px-4 py-2 text-white bg-green-500 rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200 disabled:opacity-50"
             >
               更新
             </button>
@@ -175,7 +174,6 @@ const TaskExecutionEdit: React.FC = () => {
           </div>
         </form>
       </div>
-    </div>
   );
 };
 

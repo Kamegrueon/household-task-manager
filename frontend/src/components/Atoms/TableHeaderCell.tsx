@@ -20,7 +20,7 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
 
   return (
     <th
-      className={`px-4 py-2 border-b bg-gray-200 ${alignClass} text-sm md:text-base lg:text-lg ${className} truncate`}
+      className={`py-2 border-b bg-gray-200 ${alignClass} text-xs md:text-sm lg:text-lg ${className}`}
       {...rest}
     >
       {children}

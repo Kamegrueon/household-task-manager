@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { TaskExecutionResponse } from '../types';
 import { toast } from 'react-toastify';
+import { ja } from 'date-fns/locale';
+import { format } from 'date-fns';
 
 /**
  * カスタムフック: useExecutions
@@ -28,8 +30,12 @@ const useTaskExecutions = (projectId: string | undefined) => {
     }
     setLoading(true);
     try {
-      const response = await api.get<TaskExecutionResponse[]>(`/projects/${projectId}/executions/`);
-      setExecutions(response.data);
+        const response = await api.get<TaskExecutionResponse[]>(`/projects/${projectId}/executions/`);
+        const formattedExecutions = response.data.map(execution => ({
+            ...execution,
+            execution_date: format(new Date(execution.execution_date), 'yy/MM/dd', { locale: ja }),
+        }));
+        setExecutions(formattedExecutions);
     } catch (err) {
       setError('タスク実行履歴の取得に失敗しました。');
       toast.error('タスク実行履歴の取得に失敗しました。');

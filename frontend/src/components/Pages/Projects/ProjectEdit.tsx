@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../services/api';
-import { ProjectResponse } from '../../types';
-import useProjectForm from '../../hooks/useProjectForm';
+import api from '../../../services/api';
+import { ProjectResponse } from '../../../types';
+import useProjectForm from '../../../hooks/useProjectForm';
 import { toast } from 'react-toastify';
 
 const ProjectEdit: React.FC = () => {
-  const { project_id } = useParams<{ project_id: string }>();
+  const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
   const [updateError, setUpdateError] = useState<string>('');
@@ -22,7 +22,7 @@ const ProjectEdit: React.FC = () => {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const response = await api.get<ProjectResponse>(`/projects/${project_id}`);
+        const response = await api.get<ProjectResponse>(`/projects/${projectId}`);
         const project = response.data;
         setFormData({
           name: project.name,
@@ -34,7 +34,7 @@ const ProjectEdit: React.FC = () => {
       }
     };
     fetchProject();
-  }, [project_id, setFormData]);
+  }, [projectId, setFormData]);
 
   /**
    * フォーム送信ハンドラー
@@ -44,7 +44,7 @@ const ProjectEdit: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.put(`/projects/${project_id}`, formData);
+      await api.put(`/projects/${projectId}`, formData);
       toast.success('プロジェクトが正常に更新されました。');
       navigate('/projects');
     } catch (err) {
@@ -55,7 +55,7 @@ const ProjectEdit: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-100 p-4">
+      <div className="bg-gray-100 p-4">
         <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
           <div className="p-4 mb-4 text-red-700 bg-red-100 border border-red-400 rounded">
             {error}
@@ -66,7 +66,6 @@ const ProjectEdit: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
         <h2 className="text-2xl font-bold mb-4">プロジェクト編集</h2>
         {updateError && (
@@ -105,7 +104,7 @@ const ProjectEdit: React.FC = () => {
           <div className="flex justify-between">
             <button
               type="submit"
-              className="px-4 py-2 bg-[#4CAF50] text-white rounded-full focus:outline-none focus:ring focus:ring-green-200"
+              className="px-4 py-2 bg-green-500 text-white rounded-full focus:outline-none focus:ring focus:ring-green-200"
             >
               更新
             </button>
@@ -119,7 +118,6 @@ const ProjectEdit: React.FC = () => {
           </div>
         </form>
       </div>
-    </div>
   );
 };
 

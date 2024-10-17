@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { FaTimes } from 'react-icons/fa';
-import ProjectMemberList from '../ProjectMembers/ProjectMemberList';
+import ProjectMemberList from './ProjectMemberList';
 
 interface ProjectModalProps {
     isOpen: boolean;

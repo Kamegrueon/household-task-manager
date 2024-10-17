@@ -5,18 +5,18 @@
 
     <!-- 循環する矢印 -->
     <g transform="translate(50,50)">
-        <circle cx="0" cy="0" r="25" stroke="#4CAF50" stroke-width="4" fill="none" />
+        <circle cx="0" cy="0" r="25" stroke="#22C55E" stroke-width="4" fill="none" />
         <path d="M 25,0 
              A 25,25 0 0,1 15.355,21.213 
              L 10,15 
              M 15.355,21.213 
              A 25,25 0 0,1 -15.355,21.213 
-             L -10,15" stroke="#4CAF50" stroke-width="4" fill="none" />
+             L -10,15" stroke="#22C55E" stroke-width="4" fill="none" />
     </g>
 
     <!-- カレンダーアイコン -->
     <g transform="translate(50,50)">
-        <rect x="-20" y="-30" width="40" height="40" fill="#4CAF50" rx="5" ry="5" />
+        <rect x="-20" y="-30" width="40" height="40" fill="#22C55E" rx="5" ry="5" />
         <line x1="-20" y1="-20" x2="20" y2="-20" stroke="#FFFFFF" stroke-width="2" />
         <line x1="-10" y1="-30" x2="-10" y2="-25" stroke="#FFFFFF" stroke-width="2" />
         <line x1="10" y1="-30" x2="10" y2="-25" stroke="#FFFFFF" stroke-width="2" />

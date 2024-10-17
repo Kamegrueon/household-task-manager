@@ -11,7 +11,7 @@ interface TableRowProps {
 const TableRow: React.FC<TableRowProps> = ({ children, onClick, className }) => (
   <tr
     onClick={onClick}
-    className={`hover:bg-gray-100 cursor-pointer ${className}`}
+    className={`hover:bg-gray-100 transition-colors duration-400 cursor-pointer text-sm md:text-base lg:text-lg ${className}`}
   >
     {children}
   </tr>

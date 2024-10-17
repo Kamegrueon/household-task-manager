@@ -35,20 +35,20 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
 
   return (
     <>
-      <header className="bg-white shadow">
+      <header className="fixed top-0 left-0 w-full bg-white shadow z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <NavLink to="/projects">
             <LogoWithTitle />
           </NavLink>
 
           <div className="flex items-center">
-            {/* ハンバーガーメニュー（モバイル表示時のみ） */}
+            {/* モバイルビュー用: サイズ 24 */}
             <IconButton
               onClick={toggleMenuModal}
               iconName="Menu"
               title="メニュー"
-              className="md:hidden"
               size={24}
+              className="block md:hidden"
             />
 
             {/* アカウントアイコン（デスクトップ表示時のみ） */}
@@ -81,7 +81,6 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
         project_id={projectId}
         toggleProjectModal={toggleProjectModal}  // プロジェクトモーダルを開く関数を渡す
       />
-
 
       {/* プロジェクト設定モーダル */}
       <ProjectModal

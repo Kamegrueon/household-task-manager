@@ -76,7 +76,7 @@ export interface TaskExecutionResponse {
   task_id: number;
   task_name: string;
   user_id: number;
-  executor_name: string;
+  user_name: string;
   execution_date: string; // ISO形式の日付
   created_at: string;
 }
