@@ -11,7 +11,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col bg-gray-100 min-h-screen gap-y-4 md:gap-y-6 lg:gap-y-8">
       <Header isLoggedIn={isLoggedIn} /> {/* ヘッダーを表示 */}
-        <main className="flex-grow p-2 md:p-6 lg:p-8">
+        <main className="flex-grow p-2 md:p-6 lg:p-8 pt-20 md:pt-28 lg:pt-36">
           <div className="bg-gray-100 p-2">
             {children}
           </div>

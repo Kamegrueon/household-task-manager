@@ -90,9 +90,10 @@ const TaskList: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto bg-white rounded shadow p-4">
-        <div className="flex justify-between items-center py-2">
-            <h2 className="text-lg md:text-xl lg:text-2xl font-bold">タスク一覧</h2>
-            <IconButton
+        <div className="flex items-center py-2">
+            <h2 className="w-2/4 text-lg md:text-xl lg:text-2xl font-bold">タスク一覧</h2>
+            <div className="w-3/4 flex justify-end gap-4 items-center">
+              <IconButton
             onClick={() => navigate(`/projects/${projectId}/tasks/new`)}
             className="flex items-center bg-green-500 text-white rounded-full p-2 hover:bg-green-600 focus:outline-none focus:ring"
             iconName="Plus" // 使用するアイコン名に変更（例: 'Plus'）
@@ -104,7 +105,7 @@ const TaskList: React.FC = () => {
           {/* CSVアップロードボタン */}
           <IconButton
             onClick={() => fileInputRef.current?.click()} // ファイルダイアログを開く
-            className="flex items-center bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 focus:outline-none focus:ring"
+            className="flex items-center bg-green-500 text-white rounded-full p-2 hover:bg-green-600 focus:outline-none focus:ring"
             iconName="Upload" // Upload アイコンを使用
             title="CSVアップロード"
             size={iconSize}
@@ -120,7 +121,8 @@ const TaskList: React.FC = () => {
             style={{ display: 'none' }}
             onChange={handleFileChange}
           />
-          </div>
+            </div>
+        </div>
 
         {error && <ErrorMessage message={error} />}
         {deleteError && <ErrorMessage message={deleteError} />}

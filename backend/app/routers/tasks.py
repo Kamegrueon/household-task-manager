@@ -1,6 +1,7 @@
+import csv
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app import database, models, schemas, utils
@@ -198,3 +199,90 @@ def delete_task(
     db.commit()
 
     return
+
+
+@router.post(
+    "/upload",
+    status_code=status.HTTP_201_CREATED,
+    summary="CSVファイルからタスクを一括アップロード",
+)
+async def upload_tasks(
+    project_id: int,
+    file: UploadFile = File(...),
+    db: Session = Depends(database.get_db),
+    current_user: models.User = Depends(utils.get_current_user),
+):
+    """
+    CSVファイルをアップロードして、一括でタスクを作成します。
+    CSVファイルは以下のカラムを含む必要があります:
+    - category
+    - task_name
+    - frequency
+    """
+    # プロジェクトメンバーシップの確認
+    membership = (
+        db.query(models.ProjectMember)
+        .filter(
+            models.ProjectMember.project_id == project_id,
+            models.ProjectMember.user_id == current_user.id,
+        )
+        .first()
+    )
+
+    if not membership:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="このプロジェクトに参加していません"
+        )
+
+    if file.content_type != "text/csv":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="CSVファイルをアップロードしてください"
+        )
+
+    try:
+        # CSVファイルの読み取り
+        contents = await file.read()
+        decoded = contents.decode("utf-8").splitlines()
+        reader = csv.DictReader(decoded)
+        print(reader)
+        tasks_to_create: list[dict[str, str | int]] = []
+        for row in reader:
+            print(row)
+            # 必要なカラムが存在するか確認
+            if not all(key in row for key in ["category", "task_name", "frequency"]):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="CSVファイルのフォーマットが正しくありません。'category', 'task_name', 'frequency'カラムが必要です。",
+                )
+            # タスク作成用の辞書を追加
+            tasks_to_create.append(
+                {
+                    "project_id": project_id,
+                    "category": row["category"],
+                    "task_name": row["task_name"],
+                    "frequency": row["frequency"],
+                }
+            )
+
+        # タスクの一括作成
+        new_tasks: list[dict[str, str | int]] = []
+        for task_data in tasks_to_create:
+            new_task = models.Task(
+                project_id=task_data["project_id"],
+                category=task_data["category"],
+                task_name=task_data["task_name"],
+                frequency=task_data["frequency"],
+            )
+            db.add(new_task)
+            new_tasks.append(new_task)
+
+        db.commit()
+
+        # 作成されたタスクを返す
+        return [schemas.TaskResponse.model_validate(task) for task in new_tasks]
+
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="CSVファイルの処理中にエラーが発生しました。",
+        )

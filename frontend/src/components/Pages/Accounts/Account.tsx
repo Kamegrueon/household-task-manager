@@ -1,3 +1,5 @@
+// src/components/Pages/Account.tsx
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
@@ -72,9 +74,10 @@ const Account: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto bg-gray-100 rounded shadow p-4">
-      <h1 className="screen-title mb-4">アカウント管理</h1>
-      <div className="bg-white p-4 rounded shadow">
+    <div className="max-w-full mx-auto bg-gray-100 rounded shadow p-4 sm:p-4">
+      <h1 className="screen-title mb-4 text-xl sm:text-2xl">アカウント管理</h1>
+      
+      <div className="bg-white p-4 rounded shadow w-full">
         <h2 className="text-base font-semibold mb-2">プロフィール編集</h2>
         <form onSubmit={handleUpdateProfile}>
           <div className="mb-4">
@@ -85,7 +88,7 @@ const Account: React.FC = () => {
               name="username" 
               value={username} 
               onChange={(e) => setUsername(e.target.value)} 
-              className="w-full p-2 bg-white text-gray-900 border rounded" 
+              className="w-full p-2 bg-white text-gray-900 border rounded focus:ring focus:border-blue-500" 
             />
           </div>
           <div className="mb-4">
@@ -96,14 +99,14 @@ const Account: React.FC = () => {
               name="email" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
-              className="w-full p-2 bg-white text-gray-900 border rounded" 
+              className="w-full p-2 bg-white text-gray-900 border rounded focus:ring focus:border-blue-500" 
             />
           </div>
-          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">更新</button>
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto">更新</button>
         </form>
       </div>
 
-      <div className="max-w-6xl mx-auto bg-white rounded shadow p-4 mt-4">
+      <div className="bg-white rounded shadow p-4 mt-4 w-full">
         <h2 className="text-base font-semibold mb-2">パスワード変更</h2>
         <form onSubmit={handleChangePassword}>
           <div className="mb-4">
@@ -114,7 +117,7 @@ const Account: React.FC = () => {
               name="current-password" 
               value={currentPassword} 
               onChange={(e) => setCurrentPassword(e.target.value)} 
-              className="w-full p-2 bg-white text-gray-900 border rounded" 
+              className="w-full p-2 bg-white text-gray-900 border rounded focus:ring focus:border-blue-500" 
             />
           </div>
           <div className="mb-4">
@@ -125,17 +128,17 @@ const Account: React.FC = () => {
               name="new-password" 
               value={newPassword} 
               onChange={(e) => setNewPassword(e.target.value)} 
-              className="w-full p-2 bg-white text-gray-900 border rounded" 
+              className="w-full p-2 bg-white text-gray-900 border rounded focus:ring focus:border-blue-500" 
             />
           </div>
-          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">変更</button>
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto">変更</button>
         </form>
       </div>
 
-      <div className="bg-gray-100 p-4 rounded mt-6">
+      <div className="bg-gray-100 p-4 rounded mt-6 w-full">
         <button 
           onClick={handleLogout} 
-          className="bg-green-500 text-white px-4 py-2 rounded w-full"
+          className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
         >
           ログアウト
         </button>

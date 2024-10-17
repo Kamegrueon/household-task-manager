@@ -33,10 +33,9 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
     return id !== undefined && /^\d+$/.test(id);
   };
 
-
   return (
     <>
-      <header className="bg-white shadow">
+      <header className="fixed top-0 left-0 w-full bg-white shadow z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <NavLink to="/projects">
             <LogoWithTitle />
@@ -82,7 +81,6 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
         project_id={projectId}
         toggleProjectModal={toggleProjectModal}  // プロジェクトモーダルを開く関数を渡す
       />
-
 
       {/* プロジェクト設定モーダル */}
       <ProjectModal
