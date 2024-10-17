@@ -4,7 +4,7 @@ import { ProjectMemberResponse, ProjectMemberCreate } from '../../types';
 import { getProjectMembers, createProjectMember, updateProjectMember, deleteProjectMember } from '../../services/projectMemberApi';
 import { toast } from 'react-toastify';
 import { FaPlus, FaTrash, FaTimes, FaUser, FaUserShield, FaEye } from 'react-icons/fa';
-import UserSelect from './UserSelect';
+import UserSelect from '../Molecules/UserSelect';
 
 Modal.setAppElement('#root');
 

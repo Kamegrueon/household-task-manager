@@ -1,11 +1,12 @@
 // src/components/Atoms/Icon.tsx
 
 import React from 'react';
-import { FaBars, FaCog, FaUserCircle, FaTasks, FaList, FaHistory, FaHome, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaBars, FaCog, FaUserCircle, FaTasks, FaList, FaHistory, FaHome, FaPlus, FaEdit, FaTrash, FaPlay, FaRegCheckCircle, FaUpload } from 'react-icons/fa';
 import { IconEnum } from '../../types/atoms';
 
 type IconProps = {
   size?: number;
+  className?: string;
 } & IconEnum
 
 const iconMap = {
@@ -19,12 +20,14 @@ const iconMap = {
   Plus: FaPlus,
   Edit: FaEdit,
   Trash: FaTrash,
+  Execute: FaRegCheckCircle,
+  Upload: FaUpload
 };
 
-const Icon: React.FC<IconProps> = ({ iconName, size = 24 }) => {
+const Icon: React.FC<IconProps> = ({ iconName, size, className='' }) => {
     const IconComponent = iconMap[iconName];
     return (
-        <IconComponent size={size}/>
+        <IconComponent size={size} className={className} />
     )
 };
 

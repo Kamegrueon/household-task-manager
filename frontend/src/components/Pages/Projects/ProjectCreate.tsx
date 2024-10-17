@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../services/api';
-import { ProjectResponse } from '../../types';
-import useProjectForm from '../../hooks/useProjectForm';
+import api from '../../../services/api';
+import { ProjectResponse } from '../../../types';
+import useProjectForm from '../../../hooks/useProjectForm';
 import { toast } from 'react-toastify';
 
 const ProjectCreate: React.FC = () => {
@@ -35,7 +35,6 @@ const ProjectCreate: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-md mx-auto bg-white rounded shadow p-6">
         <h2 className="text-2xl font-bold mb-4">新規プロジェクト作成</h2>
         {error && (
@@ -69,13 +68,12 @@ const ProjectCreate: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 font-semibold bg-[#4CAF50] text-white rounded-full focus:outline-none focus:ring"
+            className="w-full px-4 py-2 font-semibold bg-green-500 text-white rounded-full focus:outline-none focus:ring"
           >
             作成
           </button>
         </form>
       </div>
-    </div>
   );
 };
 

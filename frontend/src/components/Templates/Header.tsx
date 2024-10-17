@@ -33,6 +33,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
     return id !== undefined && /^\d+$/.test(id);
   };
 
+
   return (
     <>
       <header className="bg-white shadow">
@@ -42,13 +43,13 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
           </NavLink>
 
           <div className="flex items-center">
-            {/* ハンバーガーメニュー（モバイル表示時のみ） */}
+            {/* モバイルビュー用: サイズ 24 */}
             <IconButton
               onClick={toggleMenuModal}
               iconName="Menu"
               title="メニュー"
-              className="md:hidden"
               size={24}
+              className="block md:hidden"
             />
 
             {/* アカウントアイコン（デスクトップ表示時のみ） */}

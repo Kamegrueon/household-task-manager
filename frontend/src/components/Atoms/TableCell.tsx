@@ -9,7 +9,7 @@ interface TableCellProps {
 }
 
 const TableCell: React.FC<TableCellProps> = ({ children, className, align = 'center' }) => (
-  <td className={`px-4 py-2 border-b text-${align} ${className}`}>
+  <td className={`py-2 border-b text-${align} ${className}`}>
     {children}
   </td>
 );

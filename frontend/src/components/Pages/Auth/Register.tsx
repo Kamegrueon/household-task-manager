@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../../services/api';
-import { UserCreateParams, UserResponse } from '../../types';
+import api from '../../../services/api';
+import { UserCreateParams, UserResponse } from '../../../types';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow">
         <h2 className="text-2xl font-bold text-center">ユーザー登録</h2>
         {error && <div className="p-4 text-red-700 bg-red-100 border border-red-400 rounded">{error}</div>}
@@ -49,7 +49,7 @@ const Register: React.FC = () => {
               value={form.username}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-green-500"
             />
           </div>
           <div>
@@ -61,7 +61,7 @@ const Register: React.FC = () => {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-green-500"
             />
           </div>
           <div>
@@ -73,19 +73,19 @@ const Register: React.FC = () => {
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-[#4CAF50]"
+              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring ring-green-500"
             />
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 font-semibold text-white bg-[#4CAF50] rounded focus:outline-none focus:ring ring-[#4CAF50]"
+            className="w-full px-4 py-2 font-semibold text-white bg-green-500 rounded focus:outline-none focus:ring ring-green-500"
           >
             登録
           </button>
           </form>
           <div className="text-center">
             <span className="text-sm text-gray-600">既にアカウントをお持ちですか？ </span>
-            <Link to="/login" className="text-[#4CAF50] hover:underline">ログインはこちら</Link>
+            <Link to="/login" className="text-green-500 hover:underline">ログインはこちら</Link>
           </div>
       </div>
     </div>

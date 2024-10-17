@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../services/api';
+import api from '../../../services/api';
 import { toast } from 'react-toastify';
 
 const Account: React.FC = () => {
@@ -72,10 +72,10 @@ const Account: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto bg-gray-100 rounded shadow p-4">
       <h1 className="screen-title mb-4">アカウント管理</h1>
       <div className="bg-white p-4 rounded shadow">
-        <h2 className="text-xl font-semibold mb-2">プロフィール編集</h2>
+        <h2 className="text-base font-semibold mb-2">プロフィール編集</h2>
         <form onSubmit={handleUpdateProfile}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-gray-700">ユーザー名</label>
@@ -99,12 +99,12 @@ const Account: React.FC = () => {
               className="w-full p-2 bg-white text-gray-900 border rounded" 
             />
           </div>
-          <button type="submit" className="bg-[#4CAF50] text-white px-4 py-2 rounded">更新</button>
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">更新</button>
         </form>
       </div>
 
-      <div className="bg-white p-4 rounded shadow mt-6">
-        <h2 className="text-xl font-semibold mb-2">パスワード変更</h2>
+      <div className="max-w-6xl mx-auto bg-white rounded shadow p-4 mt-4">
+        <h2 className="text-base font-semibold mb-2">パスワード変更</h2>
         <form onSubmit={handleChangePassword}>
           <div className="mb-4">
             <label htmlFor="current-password" className="block text-gray-700">現在のパスワード</label>
@@ -128,14 +128,14 @@ const Account: React.FC = () => {
               className="w-full p-2 bg-white text-gray-900 border rounded" 
             />
           </div>
-          <button type="submit" className="bg-[#4CAF50] text-white px-4 py-2 rounded">変更</button>
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">変更</button>
         </form>
       </div>
 
-      <div className="bg-white p-4 rounded shadow mt-6">
+      <div className="bg-gray-100 p-4 rounded mt-6">
         <button 
           onClick={handleLogout} 
-          className="bg-[#4CAF50] text-white px-4 py-2 rounded w-full"
+          className="bg-green-500 text-white px-4 py-2 rounded w-full"
         >
           ログアウト
         </button>

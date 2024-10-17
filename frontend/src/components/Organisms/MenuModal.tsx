@@ -2,6 +2,8 @@ import React from 'react';
 import Modal from 'react-modal';
 import { FaTimes } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
+import IconButton from '../Molecules/IconButton';
+import Icon from '../Atoms/Icon';
 
 interface MenuModalProps {
     isOpen: boolean;
@@ -22,17 +24,6 @@ const MenuModal: React.FC<MenuModalProps> = ({ isOpen, toggleModal, isValidProje
         >
             <h2 className="text-lg font-bold mb-4 text-gray-800">Menu</h2>
             <div className="flex flex-col space-y-4">
-                {isValidProjectId && project_id && (
-                    <button
-                        onClick={() => {
-                            toggleModal();
-                            toggleProjectModal();  // プロジェクトモーダルを開く
-                        }}
-                        className="py-2 px-3 text-gray-700 hover:bg-gray-200 rounded-md text-left"
-                    >
-                        メンバー管理
-                    </button>
-                )}
                 <NavLink
                     to="/account"
                     className={({ isActive }) =>
@@ -42,8 +33,26 @@ const MenuModal: React.FC<MenuModalProps> = ({ isOpen, toggleModal, isValidProje
                     }
                     onClick={toggleModal}
                 >
-                    アカウント設定
+                    <div className='flex items-center space-x-2'>
+                        <Icon iconName="User" size={16}/>
+                        <span className="inline">アカウント設定</span>
+                    </div>
                 </NavLink>
+                {isValidProjectId && project_id && (
+                    <IconButton
+                        onClick={() => {
+                            toggleModal();
+                            toggleProjectModal();  // プロジェクトモーダルを開く
+                        }}
+                        className="py-2 px-3 text-gray-700 hover:bg-gray-200 rounded-md text-left flex items-center space-x-2"
+                        iconName="Settings"
+                        size={16}
+                        title="新規プロジェクト"
+                    >
+                        {/* レスポンシブ対応: モバイルではアイコンのみ、デスクトップではテキスト付き */}
+                        <span className="inline">メンバー管理</span>
+                    </IconButton>
+                )}
             </div>
             <button
                 onClick={toggleModal}
