@@ -40,30 +40,25 @@ const TaskExecutionEdit: React.FC = () => {
         const execution = executionResponse.data;
         setTaskName(execution.task_name || '');
 
-        if (execution.execution_date) {
-          const executionDateUtc = new Date(execution.execution_date);
-          if (!isNaN(executionDateUtc.getTime())) {
-            // UTCからJSTに変換（9時間加算）
-            const jstDate = new Date(executionDateUtc.getTime() + 9 * 60 * 60 * 1000);
-            // 'yyyy-MM-dd'形式にフォーマット（date input用）
-            const formattedDate = jstDate.toISOString().split('T')[0];
-            setFormData({
-              user_id: execution.user_id,
-              execution_date: formattedDate,
-            });
-          } else {
-            toast.error('実施日が無効な値です。');
-          }
-        } else {
-          toast.error('実施日が提供されていません。');
+        // UTCからJSTに変換し、datetime-local形式にフォーマット
+        const utcDate = new Date(execution.execution_date);
+        if (isNaN(utcDate.getTime())) {
+          throw new Error('実施日が無効な値です。');
         }
+        const jstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000); // UTC +9時間
+        const formattedDate = jstDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:mm'形式
+        console.log(formattedDate)
+        setFormData({
+          user_id: execution.user_id,
+          execution_date: formattedDate,
+        });
 
         // プロジェクトメンバーの取得
         const membersResponse = await getProjectMembers(parseInt(projectId));
         setMembers(membersResponse);
       } catch (err: any) {
-        setError('タスク実行履歴の取得に失敗しました。');
-        toast.error('タスク実行履歴の取得に失敗しました。');
+        setError(err.response?.data?.detail || 'タスク実行履歴の取得に失敗しました。');
+        toast.error(err.response?.data?.detail || 'タスク実行履歴の取得に失敗しました。');
       } finally {
         setLoading(false);
       }
@@ -82,16 +77,17 @@ const TaskExecutionEdit: React.FC = () => {
     setLoading(true);
     try {
       if (projectId && executionId) {
-        // 'yyyy-MM-dd'をJSTとしてUTCに変換
-        const jstDate = new Date(`${formData.execution_date}T00:00:00+09:00`);
+        // JSTのdatetime-local文字列をUTCに変換
+        const jstDate = new Date(formData.execution_date!);
         if (isNaN(jstDate.getTime())) {
           throw new Error('実施日が無効な値です。');
         }
-        const isoUtcDate = jstDate.toISOString(); // UTC ISO形式に変換
+        const utcDate = new Date(jstDate.getTime() - 9 * 60 * 60 * 1000); // JST -9時間
+        const utcIsoString = utcDate.toISOString();
 
         const updateData: TaskExecutionUpdate = {
           user_id: formData.user_id!,
-          execution_date: isoUtcDate,
+          execution_date: utcIsoString,
         };
         await api.put(`/projects/${projectId}/executions/${executionId}`, updateData);
         toast.success('タスク実行履歴が正常に更新されました。');
@@ -169,10 +165,10 @@ const TaskExecutionEdit: React.FC = () => {
           <div>
             <label htmlFor="execution_date" className="block mb-1 text-sm font-medium text-gray-700">実施日</label>
             <input
-              type="date" // 修正: 'date-local' から 'date' に変更
+              type="datetime-local"
               id="execution_date"
               name="execution_date"
-              value={formData.execution_date} // 修正: フォーマットを適用せず、'YYYY-MM-DD' を直接設定
+              value={formData.execution_date}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200"
