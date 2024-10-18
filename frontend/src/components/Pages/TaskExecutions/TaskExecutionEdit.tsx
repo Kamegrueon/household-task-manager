@@ -1,6 +1,8 @@
+// src/components/Tasks/TaskExecutionEdit.tsx
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProjectMembers } from '../../../services/projectMemberApi'; // 新しいAPIサービスのインポート
+import { getProjectMembers } from '../../../services/projectMemberApi'; // APIサービスのインポート
 import api from '../../../services/api';
 import { TaskExecutionResponse, TaskExecutionUpdate, ProjectMemberResponse } from '../../../types';
 import useTaskExecutionForm from '../../../hooks/useTaskExecutionForm';
@@ -36,16 +38,30 @@ const TaskExecutionEdit: React.FC = () => {
         // タスク実行履歴の取得
         const executionResponse = await api.get<TaskExecutionResponse>(`/projects/${projectId}/executions/${executionId}`);
         const execution = executionResponse.data;
-        setTaskName(execution.task_name);
-        setFormData({
-          user_id: execution.user_id,
-          execution_date: new Date(execution.execution_date).toISOString().substring(0, 16), // フォーマット調整
-        });
+        setTaskName(execution.task_name || '');
+
+        if (execution.execution_date) {
+          const executionDateUtc = new Date(execution.execution_date);
+          if (!isNaN(executionDateUtc.getTime())) {
+            // UTCからJSTに変換（9時間加算）
+            const jstDate = new Date(executionDateUtc.getTime() + 9 * 60 * 60 * 1000);
+            // 'yyyy-MM-dd'形式にフォーマット（date input用）
+            const formattedDate = jstDate.toISOString().split('T')[0];
+            setFormData({
+              user_id: execution.user_id,
+              execution_date: formattedDate,
+            });
+          } else {
+            toast.error('実施日が無効な値です。');
+          }
+        } else {
+          toast.error('実施日が提供されていません。');
+        }
 
         // プロジェクトメンバーの取得
         const membersResponse = await getProjectMembers(parseInt(projectId));
         setMembers(membersResponse);
-      } catch (err) {
+      } catch (err: any) {
         setError('タスク実行履歴の取得に失敗しました。');
         toast.error('タスク実行履歴の取得に失敗しました。');
       } finally {
@@ -66,17 +82,24 @@ const TaskExecutionEdit: React.FC = () => {
     setLoading(true);
     try {
       if (projectId && executionId) {
+        // 'yyyy-MM-dd'をJSTとしてUTCに変換
+        const jstDate = new Date(`${formData.execution_date}T00:00:00+09:00`);
+        if (isNaN(jstDate.getTime())) {
+          throw new Error('実施日が無効な値です。');
+        }
+        const isoUtcDate = jstDate.toISOString(); // UTC ISO形式に変換
+
         const updateData: TaskExecutionUpdate = {
           user_id: formData.user_id!,
-          execution_date: new Date(formData.execution_date!).toISOString(),
+          execution_date: isoUtcDate,
         };
         await api.put(`/projects/${projectId}/executions/${executionId}`, updateData);
         toast.success('タスク実行履歴が正常に更新されました。');
         navigate(`/projects/${projectId}/executions`);
       }
-    } catch (err) {
-      setUpdateError('タスク実行履歴の更新に失敗しました。');
-      toast.error('タスク実行履歴の更新に失敗しました。');
+    } catch (err: any) {
+      setUpdateError(err.message || 'タスク実行履歴の更新に失敗しました。');
+      toast.error(err.message || 'タスク実行履歴の更新に失敗しました。');
     } finally {
       setLoading(false);
     }
@@ -84,8 +107,8 @@ const TaskExecutionEdit: React.FC = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-100 p-4">
-        <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
+      <div className="bg-gray-100 p-4 pt-20 sm:pt-24"> {/* ヘッダーの高さを考慮した上部パディング */}
+        <div className="max-w-full sm:max-w-md mx-auto bg-white rounded shadow p-6">
           <ErrorMessage message={error} />
         </div>
       </div>
@@ -95,8 +118,8 @@ const TaskExecutionEdit: React.FC = () => {
   if (loading && !taskName) {
     // 初期データ取得中のローディング
     return (
-      <div className="bg-gray-100 p-4">
-        <div className="max-w-md mx-auto bg-white rounded shadow p-6">
+      <div className="bg-gray-100 p-4 pt-20 sm:pt-24"> {/* ヘッダーの高さを考慮した上部パディング */}
+        <div className="max-w-full sm:max-w-md mx-auto bg-white rounded shadow p-6">
           <LoadingSpinner loading={loading} />
         </div>
       </div>
@@ -104,7 +127,8 @@ const TaskExecutionEdit: React.FC = () => {
   }
 
   return (
-      <div className="max-w-md mx-auto bg-white rounded shadow p-6">
+    <div className="bg-gray-100 p-4 pt-20 sm:pt-24 min-h-screen"> {/* ヘッダーの高さを考慮した上部パディング */}
+      <div className="max-w-full sm:max-w-md mx-auto bg-white rounded shadow p-6">
         <h2 className="text-2xl font-bold mb-4">タスク実行履歴編集</h2>
         {updateError && <ErrorMessage message={updateError} />}
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -117,7 +141,7 @@ const TaskExecutionEdit: React.FC = () => {
               name="task_name"
               value={taskName}
               readOnly
-              className="w-full px-3 py-2 bg-white text-gray-900 border rounded"
+              className="w-full px-3 py-2 bg-gray-100 text-gray-900 border border-gray-300 rounded"
             />
           </div>
 
@@ -125,17 +149,17 @@ const TaskExecutionEdit: React.FC = () => {
           <div>
             <label htmlFor="user_id" className="block mb-1 text-sm font-medium text-gray-700">実施者名</label>
             <select
-              id="executor_id"
-              name="executor_id"
+              id="user_id"
+              name="user_id"
               value={formData.user_id}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200"
             >
               <option value="">選択してください</option>
               {members.map((member) => (
                 <option key={member.user.id} value={member.user.id}>
-                      {member.user.username}
+                  {member.user.username}
                 </option>
               ))}
             </select>
@@ -145,35 +169,36 @@ const TaskExecutionEdit: React.FC = () => {
           <div>
             <label htmlFor="execution_date" className="block mb-1 text-sm font-medium text-gray-700">実施日</label>
             <input
-              type="datetime-local"
+              type="date" // 修正: 'date-local' から 'date' に変更
               id="execution_date"
               name="execution_date"
-              value={formData.execution_date}
+              value={formData.execution_date} // 修正: フォーマットを適用せず、'YYYY-MM-DD' を直接設定
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-white text-gray-900 border rounded focus:outline-none focus:ring"
+              className="w-full px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200"
             />
           </div>
 
           {/* フォームボタン */}
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0 sm:space-x-2">
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 text-white bg-green-500 rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200 disabled:opacity-50"
+              className="w-full sm:w-auto px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200 disabled:opacity-50"
             >
               更新
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2 text-gray-700 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+              className="w-full sm:w-auto px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
             >
               戻る
             </button>
           </div>
         </form>
       </div>
+    </div>
   );
 };
 

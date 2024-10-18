@@ -34,13 +34,13 @@ const TableComponent = <T extends TableItem>({
               <TableHeaderCell
                 key={String(column.key)}
                 align="center"
-                className={column.hiddenOnMobile ? 'hidden md:table-cell px-4' : 'px-4'}
+                className={column.hiddenOnMobile ? 'hidden md:table-cell px-2' : 'px-2'}
               >
                 {column.label}
               </TableHeaderCell>
             ))}
             {actions.length > 0 && (
-              <TableHeaderCell className="text-center px-4" colSpan={actions.length} />
+              <TableHeaderCell className="text-center px-2" colSpan={actions.length} />
             )}
           </tr>
         </thead>
@@ -50,13 +50,13 @@ const TableComponent = <T extends TableItem>({
               {columns.map((column) => (
                 <TableCell
                   key={String(column.key)}
-                  className={column.hiddenOnMobile ? 'hidden md:table-cell px-4' : 'px-4'}
+                  className={column.hiddenOnMobile ? 'hidden md:table-cell px-2' : 'px-2'}
                 >
                   {String(item[column.key])}
                 </TableCell>
               ))}
               {actions.length > 0 && (
-                <TableCell className="text-center px-2">
+                <TableCell className="text-center">
                   <div className="flex justify-center space-x-2">
                     {actions.map((action, index) => (
                       <IconButton
