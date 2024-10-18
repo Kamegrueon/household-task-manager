@@ -42,6 +42,7 @@ def due_tasks(db: Session, project_id: int):
                 < func.current_date(),
             )
         )
+        .order_by(models.Task.category)
     )
 
     print(due_tasks_query.statement.compile(compile_kwargs={"literal_binds": True}))

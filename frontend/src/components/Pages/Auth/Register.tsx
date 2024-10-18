@@ -1,7 +1,11 @@
+// src/components/Pages/Register.tsx
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../../services/api';
-import { UserCreateParams, UserResponse } from '../../../types';
+import { UserCreateParams, UserResponse, TokenResponse } from '../../../types';
+import { setToken } from '../../../utils/auth'; // トークンを保存するユーティリティをインポート
+import { toast } from 'react-toastify';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -23,12 +27,38 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // ユーザー登録
       await api.post<UserResponse>('/auth/register/', form);
-      setSuccess('ユーザー登録に成功しました。ログインしてください。');
+      setSuccess('ユーザー登録に成功しました。自動的にログインします...');
       setError('');
-      navigate('/auth/login');
-    } catch (err) {
-      setError('ユーザー登録に失敗しました。入力内容を確認してください。');
+
+      // 自動ログイン
+      const loginResponse = await api.post<TokenResponse>(
+        '/auth/login/', 
+        new URLSearchParams({
+          username: form.email,
+          password: form.password,
+        }), 
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
+      );
+
+      // トークンを保存
+      setToken(loginResponse.data.access_token);
+      toast.success('ログインに成功しました。');
+      
+      // /projects/ にリダイレクト
+      navigate('/projects/');
+    } catch (err: any) {
+      // 登録エラー
+      if (err.response && err.response.data) {
+        setError(err.response.data.detail || 'ユーザー登録に失敗しました。');
+      } else {
+        setError('ユーザー登録に失敗しました。入力内容を確認してください。');
+      }
       setSuccess('');
     }
   };
@@ -82,11 +112,11 @@ const Register: React.FC = () => {
           >
             登録
           </button>
-          </form>
-          <div className="text-center">
-            <span className="text-sm text-gray-600">既にアカウントをお持ちですか？ </span>
-            <Link to="/login" className="text-green-500 hover:underline">ログインはこちら</Link>
-          </div>
+        </form>
+        <div className="text-center">
+          <span className="text-sm text-gray-600">既にアカウントをお持ちですか？ </span>
+          <Link to="/login" className="text-green-500 hover:underline">ログインはこちら</Link>
+        </div>
       </div>
     </div>
   );

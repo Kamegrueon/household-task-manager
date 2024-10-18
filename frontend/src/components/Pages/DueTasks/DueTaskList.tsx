@@ -9,6 +9,7 @@ import useResponsiveIconSize from '../../../hooks/useResponsiveIconSize';
 import ErrorMessage from '../../Atoms/ErrorMessage';
 import LoadingSpinner from '../../Atoms/LoadingSpinner';
 import { ActionsType } from '../../../types/atoms';
+import { toast } from 'react-toastify';
 
 const DueTaskList: React.FC = () => {
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
@@ -26,6 +27,7 @@ const DueTaskList: React.FC = () => {
     const response = await api.post<TaskExecutionResponse>(`/projects/${projectId}/executions/${taskId}/`);
     return response.data;
   };
+
 
   // 実施必要タスクを取得
   const fetchDueTasks = async () => {
@@ -48,10 +50,12 @@ const DueTaskList: React.FC = () => {
   const handleExecute = async (taskId: number) => {
     try {
       await executeTask(taskId);
+      toast.success('タスクが実行されました');
       // タスク一覧を再取得して更新
       fetchDueTasks();
     } catch (err) {
       setError('タスクの実行に失敗しました。');
+      toast.error('タスクの実行に失敗しました。');
     }
   };
 
@@ -68,7 +72,7 @@ const DueTaskList: React.FC = () => {
       title: '実行',
       iconName: 'Execute', // リテラル型に合わせる
       onClick: handleExecute,
-      className: 'text-green-500 hover:text-green-700',
+      className: 'text-green-500 hover:text-green-700 pr-4',
       size: iconSize, // モバイルサイズ
     },
   ];
