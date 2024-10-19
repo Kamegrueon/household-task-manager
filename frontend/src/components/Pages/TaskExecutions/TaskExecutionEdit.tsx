@@ -42,12 +42,18 @@ const TaskExecutionEdit: React.FC = () => {
         const execution = executionResponse.data;
         setTaskName(execution.task_name || '');
 
-        // UTCからJSTに変換し、datetime-local形式にフォーマット
-        const jstDate = toZonedTime(new Date(execution.execution_date), 'Asia/Tokyo');
-        if (isNaN(jstDate.getTime())) {
+          console.log(`${execution.execution_date}Z`)
+          console.log(new Date(execution.execution_date))
+          console.log(new Date(`${execution.execution_date}Z`))
+          console.log(toZonedTime(new Date(execution.execution_date), 'Asia/Tokyo'))
+          console.log(toZonedTime(new Date(`${execution.execution_date}Z`), 'Asia/Tokyo'))
+          // UTCからJSTに変換し、datetime-local形式にフォーマット
+        const utcDate = new Date(execution.execution_date);
+        if (isNaN(utcDate.getTime())) {
           throw new Error('実施日が無効な値です。');
         }
 
+        const jstDate = toZonedTime(utcDate, 'Asia/Tokyo');
         const formattedDate = format(jstDate, "yyyy-MM-dd'T'HH:mm", { timeZone: 'Asia/Tokyo' });
 
         setFormData({
@@ -79,14 +85,20 @@ const TaskExecutionEdit: React.FC = () => {
     setLoading(true);
     try {
         if (projectId && executionId) {
-        const jstDate = new Date(formData.execution_date!);
-        // JSTのdatetime-local文字列をUTCに変換
+            // JSTのdatetime-local文字列をUTCに変換
+
+        if (!formData.execution_date) {
+          throw new Error('実施日が未設定です。');
+        }
+
+        const jstDate = new Date(formData.execution_date);
         if (isNaN(jstDate.getTime())) {
           throw new Error('実施日が無効な値です。');
         }
 
         const utcDate = fromZonedTime(jstDate, 'Asia/Tokyo');
         const utcIsoString = utcDate.toISOString();
+        console.log(utcDate)
         console.log(`send utc-string${utcIsoString}`)
         const updateData: TaskExecutionUpdate = {
           user_id: formData.user_id!,
