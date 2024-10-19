@@ -73,7 +73,8 @@ export interface TaskExecutionUpdate {
 
 export interface TaskExecutionResponse {
   id: number;
-  task_id: number;
+	task_id: number;
+	category: string,
   task_name: string;
   user_id: number;
   user_name: string;
