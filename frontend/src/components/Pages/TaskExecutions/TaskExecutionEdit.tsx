@@ -91,12 +91,11 @@ const TaskExecutionEdit: React.FC = () => {
           throw new Error('実施日が未設定です。');
         }
 
-        const jstDate = new Date(formData.execution_date);
-        if (isNaN(jstDate.getTime())) {
+        const utcDate = fromZonedTime(formData.execution_date, 'Asia/Tokyo');
+        if (isNaN(utcDate.getTime())) {
           throw new Error('実施日が無効な値です。');
         }
 
-        const utcDate = fromZonedTime(jstDate, 'Asia/Tokyo');
         const utcIsoString = utcDate.toISOString();
         console.log(utcDate)
         console.log(`send utc-string${utcIsoString}`)
