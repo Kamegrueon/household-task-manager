@@ -96,8 +96,9 @@ const TaskExecutionEdit: React.FC = () => {
           throw new Error('実施日が無効な値です。');
         }
 
-        const utcDate = toZonedTime(jstDate, 'Asia/Tokyo');
+        const utcDate = fromZonedTime(jstDate, 'Asia/Tokyo');
         const utcIsoString = utcDate.toISOString();
+        console.log(utcDate)
         console.log(`send utc-string${utcIsoString}`)
         const updateData: TaskExecutionUpdate = {
           user_id: formData.user_id!,
