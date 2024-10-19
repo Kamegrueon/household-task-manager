@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { TaskExecutionResponse } from '../types';
 import { toast } from 'react-toastify';
-import { ja } from 'date-fns/locale';
-import { format } from 'date-fns';
+import { toJstDateFormat } from '../utils/exchangeTimeZoneDate';
 
 /**
  * カスタムフック: useExecutions
@@ -33,7 +32,7 @@ const useTaskExecutions = (projectId: string | undefined) => {
         const response = await api.get<TaskExecutionResponse[]>(`/projects/${projectId}/executions/`);
         const formattedExecutions = response.data.map(execution => ({
             ...execution,
-            execution_date: format(new Date(execution.execution_date), 'yyyy/MM/dd', { locale: ja }),
+            execution_date: toJstDateFormat(execution.execution_date),
         }));
         setExecutions(formattedExecutions);
     } catch (err) {

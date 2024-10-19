@@ -9,8 +9,7 @@ import useTaskExecutionForm from '../../../hooks/useTaskExecutionForm';
 import { toast } from 'react-toastify';
 import ErrorMessage from '../../Atoms/ErrorMessage';
 import LoadingSpinner from '../../Atoms/LoadingSpinner';
-import { toZonedTime, fromZonedTime, format } from 'date-fns-tz';
-
+import { toJstDateFormat } from '../../../utils/exchangeTimeZoneDate';
 
 const TaskExecutionEdit: React.FC = () => {
   const { projectId, executionId } = useParams<{ projectId: string; executionId: string }>();
@@ -42,19 +41,7 @@ const TaskExecutionEdit: React.FC = () => {
         const execution = executionResponse.data;
         setTaskName(execution.task_name || '');
 
-          console.log(`${execution.execution_date}Z`)
-          console.log(new Date(execution.execution_date))
-          console.log(new Date(`${execution.execution_date}Z`))
-          console.log(toZonedTime(new Date(execution.execution_date), 'Asia/Tokyo'))
-          console.log(toZonedTime(new Date(`${execution.execution_date}Z`), 'Asia/Tokyo'))
-          // UTCからJSTに変換し、datetime-local形式にフォーマット
-        const utcDate = new Date(`${execution.execution_date}Z`);
-        if (isNaN(utcDate.getTime())) {
-          throw new Error('実施日が無効な値です。');
-        }
-
-        const jstDate = toZonedTime(utcDate, 'Asia/Tokyo');
-        const formattedDate = format(jstDate, "yyyy-MM-dd'T'HH:mm", { timeZone: 'Asia/Tokyo' });
+        const formattedDate = toJstDateFormat(execution.execution_date)
 
         setFormData({
           user_id: execution.user_id,
@@ -87,21 +74,8 @@ const TaskExecutionEdit: React.FC = () => {
         if (projectId && executionId) {
             // JSTのdatetime-local文字列をUTCに変換
 
-        if (!formData.execution_date) {
-          throw new Error('実施日が未設定です。');
-        }
+        const utcIsoString = toJstDateFormat(formData.execution_date)
 
-        const utcDate = fromZonedTime(formData.execution_date, 'Asia/Tokyo');
-        if (isNaN(utcDate.getTime())) {
-          throw new Error('実施日が無効な値です。');
-        }
-
-        const utcIsoString = utcDate.toISOString();
-          console.log(`${formData.execution_date}Z`)
-          console.log(new Date(formData.execution_date))
-          console.log(new Date(`${formData.execution_date}Z`))
-          console.log(fromZonedTime(new Date(formData.execution_date), 'Asia/Tokyo'))
-          console.log(fromZonedTime(new Date(`${formData.execution_date}Z`), 'Asia/Tokyo'))
         const updateData: TaskExecutionUpdate = {
           user_id: formData.user_id!,
           execution_date: utcIsoString,
