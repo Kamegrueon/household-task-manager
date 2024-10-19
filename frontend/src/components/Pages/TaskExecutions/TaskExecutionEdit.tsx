@@ -9,7 +9,7 @@ import useTaskExecutionForm from '../../../hooks/useTaskExecutionForm';
 import { toast } from 'react-toastify';
 import ErrorMessage from '../../Atoms/ErrorMessage';
 import LoadingSpinner from '../../Atoms/LoadingSpinner';
-import { toJstDateFormat } from '../../../utils/exchangeTimeZoneDate';
+import { toJstDateFormat, toUtcDateFormat } from '../../../utils/exchangeTimeZoneDate';
 
 const TaskExecutionEdit: React.FC = () => {
   const { projectId, executionId } = useParams<{ projectId: string; executionId: string }>();
@@ -74,7 +74,7 @@ const TaskExecutionEdit: React.FC = () => {
         if (projectId && executionId) {
             // JSTのdatetime-local文字列をUTCに変換
 
-        const utcIsoString = toJstDateFormat(formData.execution_date)
+        const utcIsoString = toUtcDateFormat(formData.execution_date)
 
         const updateData: TaskExecutionUpdate = {
           user_id: formData.user_id!,
