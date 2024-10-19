@@ -48,7 +48,7 @@ const TaskExecutionEdit: React.FC = () => {
           console.log(toZonedTime(new Date(execution.execution_date), 'Asia/Tokyo'))
           console.log(toZonedTime(new Date(`${execution.execution_date}Z`), 'Asia/Tokyo'))
           // UTCからJSTに変換し、datetime-local形式にフォーマット
-        const utcDate = new Date(execution.execution_date);
+        const utcDate = new Date(`${execution.execution_date}Z`);
         if (isNaN(utcDate.getTime())) {
           throw new Error('実施日が無効な値です。');
         }
@@ -97,8 +97,11 @@ const TaskExecutionEdit: React.FC = () => {
         }
 
         const utcIsoString = utcDate.toISOString();
-        console.log(utcDate)
-        console.log(`send utc-string${utcIsoString}`)
+          console.log(`${formData.execution_date}Z`)
+          console.log(new Date(formData.execution_date))
+          console.log(new Date(`${formData.execution_date}Z`))
+          console.log(fromZonedTime(new Date(formData.execution_date), 'Asia/Tokyo'))
+          console.log(fromZonedTime(new Date(`${formData.execution_date}Z`), 'Asia/Tokyo'))
         const updateData: TaskExecutionUpdate = {
           user_id: formData.user_id!,
           execution_date: utcIsoString,
