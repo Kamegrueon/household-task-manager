@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { TaskExecutionResponse } from '../types';
 import { toast } from 'react-toastify';
-import { ja } from 'date-fns/locale';
-import { format } from 'date-fns';
 import { toJstDateFormat } from '../utils/exchangeTimeZoneDate';
 
 /**
