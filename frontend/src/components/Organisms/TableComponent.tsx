@@ -29,18 +29,18 @@ const TableComponent = <T extends TableItem>({
     <div className="overflow-x-auto">
       <Table className="w-full">
         <thead>
-          <tr>
+          <tr className='px-2'>
             {columns.map((column) => (
               <TableHeaderCell
                 key={String(column.key)}
                 align="center"
-                className={column.hiddenOnMobile ? 'hidden md:table-cell px-2' : 'px-2'}
+                className={column.hiddenOnMobile ? 'hidden md:table-cell' : ''}
               >
                 {column.label}
               </TableHeaderCell>
             ))}
             {actions.length > 0 && (
-              <TableHeaderCell className="text-center px-2" colSpan={actions.length} />
+              <TableHeaderCell className="text-center" colSpan={actions.length} />
             )}
           </tr>
         </thead>

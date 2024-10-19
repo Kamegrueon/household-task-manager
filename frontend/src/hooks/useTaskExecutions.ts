@@ -32,7 +32,7 @@ const useTaskExecutions = (projectId: string | undefined) => {
         const response = await api.get<TaskExecutionResponse[]>(`/projects/${projectId}/executions/`);
         const formattedExecutions = response.data.map(execution => ({
             ...execution,
-            execution_date: toJstDateFormat(execution.execution_date),
+            execution_date: toJstDateFormat(execution.execution_date, "MM-dd"),
         }));
         setExecutions(formattedExecutions);
     } catch (err) {
