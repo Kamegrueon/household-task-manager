@@ -40,6 +40,7 @@ const TaskExecutionList: React.FC = () => {
 
   // テーブルのカラム定義
   const columns: { key: keyof TaskExecutionResponse; label: string; hiddenOnMobile?: boolean }[] = [
+    { key: 'category', label: 'カテゴリ' },
     { key: 'task_name', label: 'タスク名' },
     { key: 'user_name', label: '実施者' },
     { key: 'execution_date', label: '実施日' },
