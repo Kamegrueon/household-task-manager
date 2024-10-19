@@ -85,6 +85,7 @@ def get_executions(
         db.query(models.TaskExecution)
         .join(models.Task, models.Task.id == models.TaskExecution.task_id)
         .filter(models.Task.project_id == project_id)
+        .order_by(models.TaskExecution.execution_date)
         .all()
     )
 
@@ -93,9 +94,10 @@ def get_executions(
         schemas.TaskExecutionResponse(
             id=exec.id,
             task_id=exec.task_id,
+            category=exec.task.category,
             task_name=exec.task.task_name,
             user_id=exec.user_id,
-            user_name=exec.user.username,  # executor のリレーションを仮定
+            user_name=exec.user.username,
             execution_date=exec.execution_date,
             created_at=exec.created_at,
         )
@@ -149,6 +151,7 @@ def get_execution(
     execution_response = schemas.TaskExecutionResponse(
         id=execution.id,
         task_id=execution.task_id,
+        category=execution.task.category,
         task_name=execution.task.task_name,
         user_id=execution.user_id,
         user_name=execution.user.username,  # executor のリレーションを仮定
@@ -228,6 +231,7 @@ def update_execution(
     execution_response = schemas.TaskExecutionResponse(
         id=execution.id,
         task_id=execution.task_id,
+        category=execution.task.category,
         task_name=execution.task.task_name,
         user_id=execution.user_id,
         user_name=execution.user.username,

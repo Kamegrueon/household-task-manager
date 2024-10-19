@@ -155,6 +155,7 @@ class TaskExecutionCreateResponse(TaskExecutionBase):
 class TaskExecutionResponse(TaskExecutionBase):
     id: int
     task_id: int
+    category: str
     task_name: str
     user_id: int
     user_name: str
