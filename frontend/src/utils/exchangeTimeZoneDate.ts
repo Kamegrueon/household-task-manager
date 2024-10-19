@@ -20,8 +20,11 @@ export const toUtcDateFormat = (date: string | undefined) => {
     if (isNaN(utcDate.getTime())) {
         throw new Error('実施日が無効な値です。');
     }
+    console.log("fromTimeZone", utcDate)
 
     const utcIsoString = utcDate.toISOString();
+
+    console.log("toISOString", utcDate)
 
     return utcIsoString
 }
