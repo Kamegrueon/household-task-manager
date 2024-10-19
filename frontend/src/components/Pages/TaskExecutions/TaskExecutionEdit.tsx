@@ -47,7 +47,7 @@ const TaskExecutionEdit: React.FC = () => {
         }
         console.log(`utc-date ${utcDate}`)
         const jstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000); // UTC +9時間
-        const formattedDate = `${jstDate.getFullYear()}-${(jstDate.getMonth()+1).toString().padStart(2, "0")}-${jstDate.getDate().toString().padStart(2, "0")}`; // 'YYYY-MM-DD'形式
+        const formattedDate = `${jstDate.getFullYear()}-${(jstDate.getMonth()+1).toString().padStart(2, "0")}-${jstDate.getDate().toString().padStart(2, "0")}T${jstDate.getHours().toString().padStart(2, "0")}:${jstDate.getMinutes().toString().padStart(2, "0")}`; // 'YYYY-MM-DD'形式
           console.log(`jst-date ${jstDate}`)
           console.log(`format-date ${formattedDate}`)
         setFormData({
@@ -167,7 +167,7 @@ const TaskExecutionEdit: React.FC = () => {
           <div>
             <label htmlFor="execution_date" className="block mb-1 text-sm font-medium text-gray-700">実施日</label>
             <input
-              type="date"
+              type="datetime-local"
               id="execution_date"
               name="execution_date"
               value={formData.execution_date}

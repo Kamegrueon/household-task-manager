@@ -1,6 +1,6 @@
-from datetime import date, datetime
+from datetime import datetime
 
-from sqlalchemy import Date, DateTime, ForeignKey, Integer, String
+from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
@@ -59,7 +59,7 @@ class TaskExecution(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     task_id: Mapped[int] = mapped_column(Integer, ForeignKey("tasks.id"))
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
-    execution_date: Mapped[datetime] = mapped_column(Date, default=date.today)
+    execution_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
 
     task = relationship("Task", back_populates="executions")
