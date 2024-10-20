@@ -10,7 +10,7 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ projectId, onProjectSettingsClick }) => (
-  <nav className="bg-gray-100 pt-4 hidden md:block">
+  <nav className="bg-gray-100 py-4 hidden md:block">
     <div className="max-w-6xl mx-auto px-4 flex space-x-4">
       <NavLinkItem to="/projects" label="プロジェクト一覧" exact />
       <NavLinkItem to={`/projects/${projectId}/tasks/due`} label="未実施タスク一覧" />
