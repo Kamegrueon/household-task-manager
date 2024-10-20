@@ -25,3 +25,24 @@
     @apply text-gray-700;
   }
 }
+
+/* src/index.css */
+
+/* スマートフォン画面（最大幅640px）でのトーストスタイル */
+@media (max-width: 640px) {
+  .Toastify__toast {
+    width: 90% !important; /* 幅を画面の90%に設定 */
+    max-width: 300px !important; /* 最大幅を300pxに制限 */
+    margin: 0 auto !important; /* 中央に配置 */
+    border-radius: 8px !important; /* 角を丸くする（任意） */
+    font-size: 14px !important; /* フォントサイズを調整（任意） */
+  }
+}
+
+/* タブレット以上の画面でのトーストスタイル */
+@media (min-width: 641px) {
+  .Toastify__toast {
+    width: 400px !important; /* 幅を400pxに設定 */
+    max-width: 90% !important; /* 最大幅を画面の90%に制限 */
+  }
+}
