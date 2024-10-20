@@ -11,6 +11,9 @@ import LoadingSpinner from '../../Atoms/LoadingSpinner';
 import { ActionsType } from '../../../types/atoms';
 import { toast } from 'react-toastify';
 
+// 追加: フィルタータイプの定義
+type FilterType = 'today' | 'tomorrow' | 'week' | 'month';
+
 const DueTaskList: React.FC = () => {
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
   const { projectId } = useParams<{ projectId: string }>();
@@ -18,8 +21,14 @@ const DueTaskList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const iconSize = useResponsiveIconSize();
 
-  const getDueTasks = async (): Promise<TaskResponse[]> => {
-    const response = await api.get<TaskResponse[]>(`/projects/${projectId}/tasks/due/`);
+  // 追加: フィルター状態の管理
+  const [filter, setFilter] = useState<FilterType>('today');
+
+  // 修正後: getDueTasks 関数に filterType を追加
+  const getDueTasks = async (filterType: FilterType): Promise<TaskResponse[]> => {
+    const response = await api.get<TaskResponse[]>(`/projects/${projectId}/tasks/due/`, {
+      params: { filter_type: filterType },
+    });
     return response.data;
   };
 
@@ -28,11 +37,12 @@ const DueTaskList: React.FC = () => {
     return response.data;
   };
 
-
-  // 実施必要タスクを取得
+  // 修正後: fetchDueTasks 関数を filter を使用するように修正
   const fetchDueTasks = async () => {
+    setLoading(true);
+    setError('');
     try {
-      const data = await getDueTasks();
+      const data = await getDueTasks(filter);
       setTasks(data);
       setLoading(false);
     } catch (err) {
@@ -41,10 +51,11 @@ const DueTaskList: React.FC = () => {
     }
   };
 
+  // 修正後: useEffect を filter に依存するように修正
   useEffect(() => {
     fetchDueTasks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filter]);
 
   // タスクを実行
   const handleExecute = async (taskId: number) => {
@@ -65,7 +76,6 @@ const DueTaskList: React.FC = () => {
     { key: 'task_name', label: 'タスク名', hiddenOnMobile: false },
   ];
 
-
   // テーブルのアクション定義
   const actions: ActionsType[]  = [
     {
@@ -78,27 +88,36 @@ const DueTaskList: React.FC = () => {
   ];
 
   return (
-      <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
-        <div className="flex justify-between items-center py-2">
-          <h2 className="text-lg md:text-xl lg:text-2xl font-bold">未実施タスク一覧</h2>
+    <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
+      {/* 修正後: フィルター選択プルダウンの追加 */}
+      <div className="flex justify-between items-center py-2">
+        <h2 className="text-lg md:text-xl lg:text-2xl font-bold">未実施タスク一覧</h2>
+        <div className="flex space-x-2">
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value as FilterType)}
+            className="bg-green-500 text-white pl-2 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-green-300"
+          >
+            <option value="today">本日</option>
+            <option value="tomorrow">明日</option>
+            <option value="week">1週間</option>
+            <option value="month">1ヶ月</option>
+          </select>
         </div>
-        {error && <ErrorMessage message={error} />}
-        {loading ? (
-          <LoadingSpinner loading={loading}/>
-        ) : tasks.length > 0 ? (
-          <TableComponent
-            items={tasks}
-            columns={columns}
-            actions={actions}
-            // onRowClick={(taskId) => {
-            //   // 行クリック時の動作（必要に応じて実装）
-            //   // 例: タスク詳細ページへの遷移
-            // }}
-          />
-        ) : (
-          <p className="text-center text-gray-500">未実施のタスクはありません。</p>
-        )}
       </div>
+      {error && <ErrorMessage message={error} />}
+      {loading ? (
+        <LoadingSpinner loading={loading}/>
+      ) : tasks.length > 0 ? (
+        <TableComponent
+          items={tasks}
+          columns={columns}
+          actions={actions}
+        />
+      ) : (
+        <p className="text-center text-gray-500">未実施のタスクはありません。</p>
+      )}
+    </div>
   );
 };
 

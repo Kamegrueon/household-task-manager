@@ -1,7 +1,9 @@
 export type IconEnum = {
     iconName: 'Menu' | 'Settings' | 'User' | 'Tasks' |
     'List' | 'History' | 'Home' | 'Plus' |
-    'Edit' | 'Trash' | 'Execute' | 'Upload';
+    'Edit' | 'Trash' | 'Execute' | 'Upload' | 'PieChart' |
+    'Reload'
+    ;
 }
 
 export type ActionsType = {

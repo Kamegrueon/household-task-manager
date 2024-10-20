@@ -16,6 +16,7 @@ const NavBar: React.FC<NavBarProps> = ({ projectId, onProjectSettingsClick }) =>
       <NavLinkItem to={`/projects/${projectId}/tasks/due`} label="未実施タスク一覧" />
       <NavLinkItem to={`/projects/${projectId}/tasks`} label="登録タスク一覧" exact />
       <NavLinkItem to={`/projects/${projectId}/executions`} label="タスク履歴一覧" />
+      <NavLinkItem to={`/projects/${projectId}/charts`} label="対応状況グラフ" exact /> {/* 追加 */}
       <IconButton
         onClick={onProjectSettingsClick}
         iconName="Settings"

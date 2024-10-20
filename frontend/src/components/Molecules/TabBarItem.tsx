@@ -6,7 +6,7 @@ import Icon from '../Atoms/Icon';
 
 interface TabBarItemProps {
   to: string;
-  iconName: 'Tasks' | 'List' | 'History' | 'Home';
+  iconName: 'Tasks' | 'List' | 'History' | 'Home' | 'PieChart';
   exact?: boolean
   label: string;
 }
