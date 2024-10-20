@@ -39,7 +39,7 @@ def due_tasks(db: Session, project_id: int):
             or_(
                 subquery.c.last_execution == None,  # noqa: E711
                 func.date(subquery.c.last_execution) + models.Task.frequency
-                < func.current_date(),
+                <= func.current_date(),
             )
         )
         .order_by(models.Task.category)

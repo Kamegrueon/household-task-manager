@@ -3,6 +3,7 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
 from app import database, models, schemas, utils
@@ -85,7 +86,7 @@ def get_executions(
         db.query(models.TaskExecution)
         .join(models.Task, models.Task.id == models.TaskExecution.task_id)
         .filter(models.Task.project_id == project_id)
-        .order_by(models.TaskExecution.execution_date)
+        .order_by(desc(models.TaskExecution.execution_date))
         .all()
     )
 
