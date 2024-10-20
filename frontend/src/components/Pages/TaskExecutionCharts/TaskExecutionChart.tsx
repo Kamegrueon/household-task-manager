@@ -26,7 +26,50 @@ const COLORS = [
   '#F1C40F'  // Yellow
 ];
 
+// カスタムツールチップの内容を定義（オプション）
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const { name, value } = payload[0];
+    return (
+      <div className="bg-white border border-gray-300 p-2 rounded shadow">
+        <p className="font-semibold">{name}</p>
+        <p>実行数: {value}</p>
+      </div>
+    );
+  }
 
+  return null;
+};
+
+// カスタムラベル関数の定義
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+}: any) => {
+  const RADIAN = Math.PI / 180;
+  // ラベルの位置を計算
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  // パーセンテージが5%以上の場合に表示
+  return percent > 0.05 ? (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? 'start' : 'end'}
+      dominantBaseline="central"
+      fontSize={12}
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  ) : null;
+};
 
 const TaskExecutionChart: React.FC<TaskExecutionChartProps> = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -161,14 +204,15 @@ const TaskExecutionChart: React.FC<TaskExecutionChartProps> = () => {
                 nameKey="username"
                 cx="50%"
                 cy="50%"
-                outerRadius={80} // グラフのサイズを調整
-                label
+                outerRadius={100} // グラフのサイズを調整
+                label={renderCustomizedLabel}
+                labelLine={false}
               >
                 {taskData.map((_entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />}/>
               <Legend verticalAlign="top" height={36}/>
             </PieChart>
           </ResponsiveContainer>
