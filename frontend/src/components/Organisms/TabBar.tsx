@@ -27,6 +27,11 @@ const TabBar: React.FC<TabBarProps> = ({ projectId }) => (
         iconName="History"
         label="タスク履歴"
       />
+      <TabBarItem
+        to={`/projects/${projectId}/charts`}
+        iconName="PieChart"
+        label="対応状況"
+      /> {/* 追加 */}
     </div>
   </nav>
 );

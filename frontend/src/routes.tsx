@@ -14,6 +14,7 @@ import Account from './components/Pages/Accounts/Account'; // アカウント管
 import PrivateRoute from './utils/PrivateRoute'; // PrivateRoute コンポーネントをインポート
 import TaskEdit from './components/Pages/Tasks/TaskEdit';
 import ProjectEdit from './components/Pages/Projects/ProjectEdit';
+import TaskExecutionChart from './components/Pages/TaskExecutionCharts/TaskExecutionChart';
 
 const RoutesConfig: React.FC = () => {
     return (
@@ -44,6 +45,7 @@ const RoutesConfig: React.FC = () => {
                         <Route path="projects/:projectId/executions" element={<TaskExecutionList />} />
                         <Route path="projects/:projectId/executions/:executionId/edit" element={<TaskExecutionEdit />} />
                         <Route path="projects/:projectId/tasks/due" element={<DueTaskList />} />
+                        <Route path="/projects/:projectId/charts" element={<TaskExecutionChart />} />
                         <Route path="account" element={<Account />} /> {/* アカウント管理ルートを追加 */}
                     </Route>
 

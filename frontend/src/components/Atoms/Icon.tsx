@@ -1,7 +1,7 @@
 // src/components/Atoms/Icon.tsx
 
 import React from 'react';
-import { FaBars, FaCog, FaUserCircle, FaTasks, FaList, FaHistory, FaHome, FaPlus, FaEdit, FaTrash, FaRegCheckCircle, FaUpload } from 'react-icons/fa';
+import { FaBars, FaCog, FaUserCircle, FaTasks, FaList, FaHistory, FaHome, FaPlus, FaEdit, FaTrash, FaRegCheckCircle, FaUpload, FaChartPie, FaSync } from 'react-icons/fa';
 import { IconEnum } from '../../types/atoms';
 
 type IconProps = {
@@ -21,7 +21,9 @@ const iconMap = {
   Edit: FaEdit,
   Trash: FaTrash,
   Execute: FaRegCheckCircle,
-  Upload: FaUpload
+  Upload: FaUpload,
+  PieChart: FaChartPie,
+  Reload: FaSync
 };
 
 const Icon: React.FC<IconProps> = ({ iconName, size, className='' }) => {

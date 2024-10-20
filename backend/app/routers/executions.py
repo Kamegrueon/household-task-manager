@@ -1,8 +1,9 @@
 # app/routers/executions.py
 
-from typing import List
+from datetime import date
+from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
@@ -61,11 +62,14 @@ def create_execution(
 @router.get("/", response_model=List[schemas.TaskExecutionResponse])
 def get_executions(
     project_id: int,
+    startDate: Optional[date] = Query(None, alias="startDate"),
+    endDate: Optional[date] = Query(None, alias="endDate"),
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(utils.get_current_user),
 ):
     """
-    指定されたプロジェクト内のすべてのタスク実行履歴を取得します。
+    指定されたプロジェクト内のタスク実行履歴を取得します。
+    期間を指定することも可能です。
     """
     # プロジェクトメンバーシップの確認
     membership = (
@@ -82,13 +86,28 @@ def get_executions(
             status_code=status.HTTP_403_FORBIDDEN, detail="このプロジェクトに参加していません"
         )
 
-    executions = (
+    # 日付範囲のバリデーション
+    if startDate and endDate and startDate > endDate:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="開始日は終了日より前の日付にしてください。",
+        )
+
+    # ベースクエリの作成
+    query = (
         db.query(models.TaskExecution)
         .join(models.Task, models.Task.id == models.TaskExecution.task_id)
         .filter(models.Task.project_id == project_id)
-        .order_by(desc(models.TaskExecution.execution_date))
-        .all()
     )
+
+    # クエリパラメータに基づくフィルタリング
+    if startDate:
+        query = query.filter(models.TaskExecution.execution_date >= startDate)
+    if endDate:
+        query = query.filter(models.TaskExecution.execution_date <= endDate)
+
+    # 実行日順に並べ替え
+    executions = query.order_by(desc(models.TaskExecution.execution_date)).all()
 
     # スキーマに変換（タスク名と実施者名を含める）
     execution_responses = [

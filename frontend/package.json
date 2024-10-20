@@ -25,6 +25,7 @@
     "react-select": "^5.8.1",
     "react-spinners": "^0.14.1",
     "react-toastify": "^10.0.6",
+    "recharts": "^2.13.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
