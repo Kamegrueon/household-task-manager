@@ -1,7 +1,9 @@
+// src/components/Pages/Login.tsx
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../../services/api';
-import { setToken } from '../../../utils/auth';
+import { setAccessToken, setRefreshToken } from '../../../utils/auth';
 import { TokenResponse } from '../../../types';
 
 const Login: React.FC = () => {
@@ -27,7 +29,8 @@ const Login: React.FC = () => {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
-      setToken(response.data.access_token);
+      setAccessToken(response.data.access_token);
+      setRefreshToken(response.data.refresh_token);
       navigate('/projects');
     } catch (err) {
       setError('ログインに失敗しました。メールアドレスまたはパスワードを確認してください。');

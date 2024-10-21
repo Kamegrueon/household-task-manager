@@ -1,16 +1,27 @@
-from fastapi import APIRouter, Depends, HTTPException
+from datetime import datetime, timedelta
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import User
-from app.schemas import PasswordChange, Token, UserCreate, UserResponse, UserUpdate
+from app.models import RefreshToken, User
+from app.schemas import (
+    PasswordChange,
+    RefreshTokenRequest,
+    Token,
+    UserCreate,
+    UserResponse,
+    UserUpdate,
+)
 from app.utils import (
     authenticate_user,
     create_access_token,
+    create_refresh_token,
     get_current_user,
     hash_password,
+    refresh_access_token,
     verify_password,
 )
 
@@ -56,7 +67,28 @@ def login(
         raise HTTPException(status_code=400, detail="パスワードが正しくありません")
 
     access_token = create_access_token(data={"sub": str(user.id)})
-    return {"access_token": access_token, "token_type": "bearer"}
+    refresh_token = create_refresh_token(data={"sub": str(user.id)})
+
+    # リフレッシュトークンをデータベースに保存
+    new_refresh_token = RefreshToken(
+        token=refresh_token,
+        user_id=user.id,
+        expires_at=datetime.now() + timedelta(days=3),
+    )
+    db.add(new_refresh_token)
+    db.commit()
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+    }
+
+
+@router.post("/refresh/", response_model=Token)
+def refresh_token_endpoint(
+    refresh_token: RefreshTokenRequest, db: Session = Depends(get_db)
+):
+    return refresh_access_token(refresh_token)
 
 
 @router.get("/me", response_model=UserResponse)
@@ -104,3 +136,16 @@ def change_password(
     db.add(current_user)
     db.commit()
     return {"msg": "パスワードが変更されました。"}
+
+
+@router.post("/logout/", status_code=status.HTTP_204_NO_CONTENT)
+def logout(refresh_token: RefreshTokenRequest, db: Session = Depends(get_db)):
+    stored_token = (
+        db.query(RefreshToken)
+        .filter(RefreshToken.token == refresh_token.refresh_token)
+        .first()
+    )
+    if stored_token:
+        db.delete(stored_token)
+        db.commit()
+    return

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../../services/api';
 import { UserCreateParams, UserResponse, TokenResponse } from '../../../types';
-import { setToken } from '../../../utils/auth'; // トークンを保存するユーティリティをインポート
+import { setAccessToken, setRefreshToken } from '../../../utils/auth'; // トークンを保存するユーティリティをインポート
 import { toast } from 'react-toastify';
 
 const Register: React.FC = () => {
@@ -47,9 +47,10 @@ const Register: React.FC = () => {
       );
 
       // トークンを保存
-      setToken(loginResponse.data.access_token);
+      setAccessToken(loginResponse.data.access_token);
+      setRefreshToken(loginResponse.data.refresh_token);
       toast.success('ログインに成功しました。');
-      
+
       // /projects/ にリダイレクト
       navigate('/projects/');
     } catch (err: any) {
