@@ -125,22 +125,22 @@ def get_due_tasks(
         target_end = utc_today_end
     elif filter_type == FilterType.tomorrow:
         # JSTでの明日の開始と終了を計算
-        jst_tomorrow_start = jst_today_start + timedelta(days=1)
+        # jst_tomorrow_start = jst_today_start + timedelta(days=1)
         jst_tomorrow_end = jst_today_end + timedelta(days=1)
 
-        target_start = jst_tomorrow_start.astimezone(timezone.utc)
+        target_start = utc_today_start
         target_end = jst_tomorrow_end.astimezone(timezone.utc)
     elif filter_type == FilterType.week:
         # JSTでの1週間後の終了日時
         jst_week_end = jst_today_end + timedelta(days=7)
 
-        target_start = jst_today_start.astimezone(timezone.utc)
+        target_start = utc_today_start
         target_end = jst_week_end.astimezone(timezone.utc)
     elif filter_type == FilterType.month:
         # JSTでの1ヶ月後の終了日時（30日後と定義）
         jst_month_end = jst_today_end + timedelta(days=30)
 
-        target_start = jst_today_start.astimezone(timezone.utc)
+        target_start = utc_today_start
         target_end = jst_month_end.astimezone(timezone.utc)
     else:
         # デフォルトは今日と同じ
