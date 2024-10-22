@@ -5,8 +5,9 @@ from enum import Enum
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import and_, func, or_
+from sqlalchemy import and_, func, literal, or_
 from sqlalchemy.orm import Session
+from sqlalchemy.types import Interval
 from zoneinfo import ZoneInfo  # 追加: ZoneInfoをインポート
 
 from app import database, models, schemas, utils
@@ -33,7 +34,6 @@ def due_tasks(
     実施が必要なタスクの一覧を取得します。
     実施が必要なタスクとは、前回実施日 + 頻度日数が target_start から target_end の範囲内にあるタスク。
     """
-
     # サブクエリで各タスクの最新実行日を取得
     subquery = (
         db.query(
@@ -46,6 +46,9 @@ def due_tasks(
         .subquery()
     )
 
+    # INTERVAL '1 day' を表現
+    interval_one_day = literal("1 day").cast(Interval())
+
     # 実施が必要なタスクをフィルタリング
     due_tasks_query = (
         db.query(models.Task)
@@ -55,8 +58,13 @@ def due_tasks(
             or_(
                 subquery.c.last_execution == None,  # noqa: E711
                 and_(
-                    subquery.c.last_execution + models.Task.frequency >= target_start,
-                    subquery.c.last_execution + models.Task.frequency <= target_end,
+                    # frequencyがInteger型の場合、INTERVAL '1 day' * frequency として加算
+                    subquery.c.last_execution
+                    + (interval_one_day * models.Task.frequency)
+                    >= target_start,
+                    subquery.c.last_execution
+                    + (interval_one_day * models.Task.frequency)
+                    <= target_end,
                 ),
             )
         )
