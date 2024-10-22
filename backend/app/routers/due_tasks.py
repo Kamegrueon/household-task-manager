@@ -1,12 +1,13 @@
 # app/routers/due_tasks.py
 
-from datetime import date, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import func, or_
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
+from zoneinfo import ZoneInfo  # 追加: ZoneInfoをインポート
 
 from app import database, models, schemas, utils
 
@@ -25,10 +26,12 @@ router = APIRouter(
 )
 
 
-def due_tasks(db: Session, project_id: int, target_date: date):
+def due_tasks(
+    db: Session, project_id: int, target_start: datetime, target_end: datetime
+):
     """
     実施が必要なタスクの一覧を取得します。
-    実施が必要なタスクとは、前回実施日 + 頻度日数 <= target_date のタスク。
+    実施が必要なタスクとは、前回実施日 + 頻度日数が target_start から target_end の範囲内にあるタスク。
     """
 
     # サブクエリで各タスクの最新実行日を取得
@@ -51,8 +54,10 @@ def due_tasks(db: Session, project_id: int, target_date: date):
         .filter(
             or_(
                 subquery.c.last_execution == None,  # noqa: E711
-                func.date(subquery.c.last_execution) + models.Task.frequency
-                <= target_date,
+                and_(
+                    subquery.c.last_execution + models.Task.frequency >= target_start,
+                    subquery.c.last_execution + models.Task.frequency <= target_end,
+                ),
             )
         )
         .order_by(models.Task.category)
@@ -92,19 +97,47 @@ def get_due_tasks(
             status_code=status.HTTP_403_FORBIDDEN, detail="このプロジェクトに参加していません"
         )
 
-    # Determine target_date based on filter_type
-    today = date.today()
-    if filter_type == FilterType.today:
-        target_date = today
-    elif filter_type == FilterType.tomorrow:
-        target_date = today + timedelta(days=1)
-    elif filter_type == FilterType.week:
-        target_date = today + timedelta(days=7)
-    elif filter_type == FilterType.month:
-        target_date = today + timedelta(days=30)  # 1ヶ月後を30日と定義
-    else:
-        # Default to today if no filter_type provided
-        target_date = today
+    # JSTタイムゾーンの定義
+    jst = ZoneInfo("Asia/Tokyo")
 
-    tasks = due_tasks(db, project_id, target_date)
+    # 現在のJST日時を取得
+    jst_now = datetime.now(jst)
+
+    # JSTでの今日の開始（0:00）と終了（23:59:59.999999）を計算
+    jst_today_start = jst_now.replace(hour=0, minute=0, second=0, microsecond=0)
+    jst_today_end = jst_today_start + timedelta(days=1) - timedelta(microseconds=1)
+
+    # UTCに変換
+    utc_today_start = jst_today_start.astimezone(timezone.utc)
+    utc_today_end = jst_today_end.astimezone(timezone.utc)
+
+    # FilterTypeに基づいてtarget_startとtarget_endを設定
+    if filter_type == FilterType.today:
+        target_start = utc_today_start
+        target_end = utc_today_end
+    elif filter_type == FilterType.tomorrow:
+        # JSTでの明日の開始と終了を計算
+        jst_tomorrow_start = jst_today_start + timedelta(days=1)
+        jst_tomorrow_end = jst_today_end + timedelta(days=1)
+
+        target_start = jst_tomorrow_start.astimezone(timezone.utc)
+        target_end = jst_tomorrow_end.astimezone(timezone.utc)
+    elif filter_type == FilterType.week:
+        # JSTでの1週間後の終了日時
+        jst_week_end = jst_today_end + timedelta(days=7)
+
+        target_start = jst_today_start.astimezone(timezone.utc)
+        target_end = jst_week_end.astimezone(timezone.utc)
+    elif filter_type == FilterType.month:
+        # JSTでの1ヶ月後の終了日時（30日後と定義）
+        jst_month_end = jst_today_end + timedelta(days=30)
+
+        target_start = jst_today_start.astimezone(timezone.utc)
+        target_end = jst_month_end.astimezone(timezone.utc)
+    else:
+        # デフォルトは今日と同じ
+        target_start = utc_today_start
+        target_end = utc_today_end
+
+    tasks = due_tasks(db, project_id, target_start, target_end)
     return tasks
