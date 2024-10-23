@@ -5,7 +5,7 @@ from enum import Enum
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import and_, func, literal, or_
+from sqlalchemy import func, literal, or_
 from sqlalchemy.orm import Session
 from sqlalchemy.types import Interval
 from zoneinfo import ZoneInfo  # 追加: ZoneInfoをインポート
@@ -57,15 +57,14 @@ def due_tasks(
         .filter(
             or_(
                 subquery.c.last_execution == None,  # noqa: E711
-                and_(
-                    # frequencyがInteger型の場合、INTERVAL '1 day' * frequency として加算
-                    subquery.c.last_execution
-                    + (interval_one_day * models.Task.frequency)
-                    >= target_start,
-                    subquery.c.last_execution
-                    + (interval_one_day * models.Task.frequency)
-                    <= target_end,
-                ),
+                # and_(
+                # frequencyがInteger型の場合、INTERVAL '1 day' * frequency として加算
+                # subquery.c.last_execution
+                # + (interval_one_day * models.Task.frequency)
+                # >= target_start,
+                subquery.c.last_execution + (interval_one_day * models.Task.frequency)
+                <= target_end,
+                # ),
             )
         )
         .order_by(models.Task.category)
