@@ -19,9 +19,9 @@ app = FastAPI()
 
 # CORS設定
 origins = [
+    "http://localhost:4173",  # フロントエンドのURL
     "http://localhost:5173",  # フロントエンドのURL
     "https://household-task-manager-topaz.vercel.app"
-    # 他に許可するオリジンがあれば追加
 ]
 
 app.add_middleware(

@@ -1,55 +1,42 @@
-[tool.poetry]
+[project]
+dependencies = [
+    "alembic>=1.16.4",
+    "dotenv>=0.9.9",
+    "fastapi>=0.116.1",
+    "passlib>=1.7.4",
+    "psycopg2-binary>=2.9.10",
+    "pydantic[email]>=2.11.7",
+    "pydantic-settings>=2.10.1",
+    "pyjwt>=2.10.1",
+    "sqlalchemy>=2.0.41",
+    "uvicorn>=0.35.0",
+    "python-jose>=3.5.0",
+    "python-multipart>=0.0.20",
+]
+description = "Add your description here"
 name = "backend"
-version = "0.1.0"
-description = ""
-authors = ["AnagumaReonKK <niwaniwaniwaniwatori.gairuze@gmail.com>"]
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "3.12.5"
-fastapi = "^0.115.0"
-uvicorn = "^0.31.1"
-supabase = "^2.9.0"
-pyjwt = "^2.9.0"
-python-dotenv = "^1.0.1"
-sqlalchemy = "^2.0.35"
-pydantic-settings = "^2.5.2"
-psycopg2 = "^2.9.9"
-pydantic = {extras = ["email"], version = "^2.9.2"}
-python-jose = "^3.3.0"
-passlib = "^1.7.4"
-bcrypt = "4.0.1"
-cffi = "1.15.0"
-python-multipart = "^0.0.12"
-alembic = "^1.13.3"
-
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.6.9"
-pre-commit = "^4.0.1"
-black = "^24.10.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = ">=3.12.5"
+version = "0.1.0"
 
 [tool.ruff.lint]
 # チェックするエラーの種類
 select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "B",  # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
+  "E", # pycodestyle errors
+  "W", # pycodestyle warnings
+  "F", # pyflakes
+  "I", # isort
+  "B", # flake8-bugbear
+  "C4", # flake8-comprehensions
+  "UP", # pyupgrade
 ]
 # 除外するエラーの種類
 ignore = [
-    "E501",  # line too long, handled by black
-    "B008",  # do not perform function calls in argument defaults
-    "C901",  # too complex
-    "W191",  # indentation contains tabs
-    "B904", # raise ... from ... になっていない場合のエラーを無視
+  "E501", # line too long, handled by black
+  "B008", # do not perform function calls in argument defaults
+  "C901", # too complex
+  "W191", # indentation contains tabs
+  "B904", # raise ... from ... になっていない場合のエラーを無視
 ]
 
 # ファイルごとのエラー除外
