@@ -1,4 +1,15 @@
 services:
+  nginx:
+    image: nginx:latest
+    container_name: household-task-manager-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    depends_on:
+      - frontend
+    restart: always
   db:
     image: postgres:16
     container_name: household-task-manager-db
