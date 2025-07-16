@@ -1,5 +1,4 @@
 import os
-from typing import Optional
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -14,12 +13,13 @@ if environment != "production":
 
 class Settings(BaseSettings):
     environment: str = environment  # デフォルトは開発環境
-    supabase_database_url: Optional[str] = None  # 本番環境でのみ使用
-    supabase_anon_key: Optional[str] = None  # 本番環境でのみ必要
-    supabase_service_role_key: Optional[str] = None  # 本番環境でのみ必要
-    local_database_url: Optional[str] = None  # ローカル開発用のデータベースURLを追加
-    secret_key: Optional[str] = None
+    supabase_database_url: str | None = None  # 本番環境でのみ使用
+    supabase_anon_key: str | None = None  # 本番環境でのみ必要
+    supabase_service_role_key: str | None = None  # 本番環境でのみ必要
+    local_database_url: str | None = None  # ローカル開発用のデータベースURLを追加
+    secret_key: str | None = None
     access_token_expire_minutes: int = 30
+    cors_origins: str | None = None  # CORSオリジンを環境変数から取得
 
     model_config = SettingsConfigDict(env_file=None)  # 本番環境ではenv_fileを使用しない
 
@@ -39,6 +39,7 @@ class Settings(BaseSettings):
                 raise ValueError("SUPABASE_DATABASE_URL が設定されていません。環境変数を確認してください。")
             if not self.secret_key:
                 raise ValueError("SECRET_KEY が設定されていません。環境変数を確認してください。")
-
+            if not self.cors_origins:
+                raise ValueError("CORS_ORIGINS が設定されていません。環境変数を確認してください。")
 
 settings = Settings()
