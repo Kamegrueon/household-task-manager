@@ -1,0 +1,16 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: household-task-manager-frontend
+    ports:
+      - "3000:4173"
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - backend
+    command: ["yarn", "preview", "--host"]
+    volumes:
+      - ./frontend:/app
