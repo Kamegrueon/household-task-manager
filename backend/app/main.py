@@ -12,17 +12,16 @@ from app.routers import (
     users,
 )
 
+from .settings import settings
+
+origins = settings.cors_origins
 # テーブルの作成
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 # CORS設定
-origins = [
-    "http://localhost:3000",  # フロントエンドのURL
-    "http://localhost:5173",  # フロントエンドのURL
-    "https://household-task-manager-topaz.vercel.app"
-]
+origins = [origin.strip() for origin in origins.split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,
