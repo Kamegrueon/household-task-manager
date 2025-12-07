@@ -1,7 +1,7 @@
 """Add description column to Project model
 
 Revision ID: c8bb7708cfe3
-Revises:
+Revises: 000_initial
 Create Date: 2024-10-12 23:51:16.426767
 
 """
@@ -13,7 +13,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "c8bb7708cfe3"
-down_revision: Union[str, None] = None
+down_revision: Union[str, None] = "000_initial"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

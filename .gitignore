@@ -6,3 +6,10 @@ poetry.lock
 # その他の不要ファイル
 __pycache__/
 *.pyc
+
+# Database dumps (NEVER commit sensitive data)
+*.dump
+
+# Docker
+.dockerignore
+docker-compose.override.yml
