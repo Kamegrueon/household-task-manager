@@ -30,7 +30,6 @@ if cors_origins_env:
 # 開発環境用のオリジンを追加
 dev_origins = [
     "http://localhost:80",
-    "http://localhost:5173",
 ]
 origins.extend(dev_origins)
 
