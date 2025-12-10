@@ -33,7 +33,7 @@ const DueTaskList: React.FC = () => {
   };
 
   const executeTask = async (taskId: number): Promise<TaskExecutionResponse> => {
-    const response = await api.post<TaskExecutionResponse>(`/projects/${projectId}/executions/${taskId}/`);
+    const response = await api.post<TaskExecutionResponse>(`/projects/${projectId}/executions/${taskId}`);
     return response.data;
   };
 
