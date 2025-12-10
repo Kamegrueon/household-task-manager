@@ -11,12 +11,12 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy dependency files
-COPY pyproject.toml requirements.txt ./
+# Copy dependency file
+COPY requirements.txt ./
 
 # Install dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# Python 3.12-slim ships with recent pip, no need to upgrade
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Stage 2: Runtime stage
 FROM python:3.12-slim
