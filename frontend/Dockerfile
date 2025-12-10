@@ -6,9 +6,10 @@ WORKDIR /app
 # Copy package files first for better layer caching
 COPY package.json package-lock.json ./
 
-# Install dependencies using npm ci for faster, reproducible builds
-# npm ci uses exact versions from package-lock.json
-RUN npm ci --frozen-lockfile
+# Install dependencies
+# Note: Removing package-lock.json due to npm bug with optional dependencies
+# See: https://github.com/npm/cli/issues/4828
+RUN rm -f package-lock.json && npm install
 
 # Copy source code after dependencies (optimizes layer caching)
 COPY . .
