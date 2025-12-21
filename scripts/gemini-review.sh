@@ -24,7 +24,7 @@ PROMPT="あなたは優秀なエンジニアです。
 $DIFF"
 
 # 4. Gemini CLIの実行
-REVIEW=$(echo "$PROMPT" | gemini -o text)
+REVIEW=$(echo "$PROMPT" | gemini -o text -m gemini-2.5-flash-lite)
 
 # 実行に失敗した場合（未ログインや通信エラーなど）
 if [ $? -ne 0 ]; then
